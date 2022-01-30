@@ -11,7 +11,7 @@ from torchvision import datasets, transforms
 from torch.utils.data.dataset import Dataset   
 
 # import class
-from lenet5 import LeNet
+from lenet5 import LeNet5 as LeNet
 from utils import client_update,server_aggregate, test
 
 ##### Hyperparameters for federated learning #########
