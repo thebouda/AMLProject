@@ -2,58 +2,43 @@
 # -*- coding: utf-8 -*-
 # Python version: 3.6
 
+import torch
 from torch import nn
 import torch.nn.functional as F
 
-
 class LeNet(nn.Module):
     def __init__(self):
-        super(LeNet,self).__init__()
-        #Here, we are plementing those layers which are having learnable parameters.
-        #Start implementation of Layer 1 (C1) which has 6 kernels of size 5x5 with padding 0 and stride 1
-        self.conv1 = nn.Conv2d(in_channels=3,out_channels=6,kernel_size=(5,5),padding=0,stride=1) # we changed channels in from 1 to 3 as the images on cifar are rgb
+        super(LeNet, self).__init__()
+        self.conv1 = nn.Conv2d(3, 64, 5)
+        self.conv2 = nn.Conv2d(64, 64, 5)
 
-        #Start implementation of Layer 3 (C3) which has 16 kernels of size 5x5 with padding 0 and stride 1
-        self.conv2 = nn.Conv2d(in_channels = 6, out_channels = 16,kernel_size = (5,5),padding=0,stride=1)
+        self.pool1 = nn.MaxPool2d(2)
+        self.pool2 = nn.MaxPool2d(2)
 
-        #Start implementation of Layer 5 (C5) which is basically flattening the data   
-        self.conv3 = nn.Conv2d(in_channels = 16, out_channels = 120,kernel_size = (5,5),padding=0,stride=1)
+        self.relu1 = nn.ReLU()
+        self.relu2 = nn.ReLU()
+        self.relu3 = nn.ReLU()
+        self.relu4 = nn.ReLU()
 
-        #Start implementation of Layer 6 (F6) which has 85 Linear Neurons and input of 120
-        self.L1 = nn.Linear(120,84)
-        
-        #Start implementation of Layer 7 (F7) which has 10 Linear Neurons and input of 84
-        self.L2 = nn.Linear(84,10)
+        self.fc1 = nn.Linear(64*5*5, 384)
+        self.fc2 = nn.Linear(384, 192)
+        self.fc3 = nn.Linear(192, 10)
 
-        #We have used pooling of size 2 and stride 2 in this architecture 
-        self.pool = nn.AvgPool2d(kernel_size = 2, stride = 2)
 
-        #We have used tanh as an activation function in this architecture so we will use tanh at all layers excluding F7.
-        self.act = nn.Tanh()
-        
-    #Now we will implement forward function to produce entire flow of the architecture.
-    
-    def forward(self,x):
-        x = self.conv1(x)
-        #We have used tanh as an activation function in this architecture so we will use tanh at all layers excluding F7.
-        x = self.act(x)
-        #Now this will be passed from pooling 
-        x = self.pool(x)
-        #Next stage is convolution
-        x = self.conv2(x)
-        x = self.act(x)
-        x = self.pool(x)
-        #next we will pass from conv3, here we will not pass data from pooling as per Architecture 
-        x = self.conv3(x)
-        x = self.act(x)
-        
-        #Now the data should be flaten and it would be passed from FC layers. 
-        x = x.view(x.size()[0], -1)
-        x = self.L1(x)
-        x = self.act(x)
-        x = self.L2(x)
-               
-        return x
+    def forward(self, x):
+        y = self.conv1(x)
+        y = self.pool1(y)
+        y = self.relu1(y)
+        y = self.conv2(y)
+        y = self.pool2(y)
+        y = self.relu2(y)
+        y = y.view(x.size()[0], -1)
+        y = self.fc1(y)
+        y = self.relu3(y)
+        y = self.fc2(y)
+        y = self.relu4(y)
+        y = self.fc3(y)
+        return torch.softmax(y,dim=1) 
 
 class MLP(nn.Module):
     def __init__(self, dim_in, dim_hidden, dim_out):
@@ -136,7 +121,7 @@ class CNNCifar(nn.Module):
 
 class modelC(nn.Module):
     def __init__(self, input_size, n_classes=10, **kwargs):
-        super(AllConvNet, self).__init__()
+        super(modelC, self).__init__()
         self.conv1 = nn.Conv2d(input_size, 96, 3, padding=1)
         self.conv2 = nn.Conv2d(96, 96, 3, padding=1)
         self.conv3 = nn.Conv2d(96, 96, 3, padding=1, stride=2)

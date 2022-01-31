@@ -29,10 +29,10 @@ if __name__ == '__main__':
     args = args_parser()
     exp_details(args)
 
-    #if args.gpu_id:
+    # if args.gpu_id:
     #    torch.cuda.set_device(args.gpu_id)
     #device = 'cuda' if args.gpu else 'cpu'
-    device ='cpu'
+    device = 'cpu'
 
     # load dataset and user groups
     train_dataset, test_dataset, user_groups = get_dataset(args)
@@ -58,7 +58,7 @@ if __name__ == '__main__':
     elif args.model == 'lenet':
         # LeNet5
         global_model = LeNet()
-        
+
     else:
         exit('Error: unrecognized model')
 
@@ -79,7 +79,7 @@ if __name__ == '__main__':
 
     for epoch in tqdm(range(args.epochs)):
         local_weights, local_losses = [], []
-        print(f'\n | Global Training Round : {epoch+1} |\n')
+        print("\n | Global Training Round : ", epoch+1, " |\n")
 
         global_model.train()
         m = max(int(args.frac * args.num_users), 1)
@@ -115,14 +115,14 @@ if __name__ == '__main__':
 
         # print global training loss after every 'i' rounds
         if (epoch+1) % print_every == 0:
-            print(f' \nAvg Training Stats after {epoch+1} global rounds:')
-            print(f'Training Loss : {np.mean(np.array(train_loss))}')
+            print(" \nAvg Training Stats after ",epoch+1," global rounds:")
+            print("Training Loss : ",np.mean(np.array(train_loss)))
             print('Train Accuracy: {:.2f}% \n'.format(100*train_accuracy[-1]))
 
     # Test inference after completion of training
     test_acc, test_loss = test_inference(args, global_model, test_dataset)
 
-    print(f' \n Results after {args.epochs} global rounds of training:')
+    print(" \n Results after ",args.epochs," global rounds of training:")
     print("|---- Avg Train Accuracy: {:.2f}%".format(100*train_accuracy[-1]))
     print("|---- Test Accuracy: {:.2f}%".format(100*test_acc))
 
@@ -150,7 +150,7 @@ if __name__ == '__main__':
     plt.savefig('save/fed_{}_{}_{}_C[{}]_iid[{}]_E[{}]_B[{}]_loss.png'.
                 format(args.dataset, args.model, args.epochs, args.frac,
                        args.iid, args.local_ep, args.local_bs))
-    
+
     # Plot Average Accuracy vs Communication rounds
     plt.figure()
     plt.title('Average Accuracy vs Communication rounds')
