@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader
 from utils import get_dataset
 from options import args_parser
 from update import test_inference
-from models import MLP, CNNMnist, CNNFashion_Mnist, CNNCifar
+from models import MLP, CNNMnist, CNNFashion_Mnist, CNNCifar, LeNet
 
 
 if __name__ == '__main__':
@@ -41,6 +41,10 @@ if __name__ == '__main__':
             len_in *= x
             global_model = MLP(dim_in=len_in, dim_hidden=64,
                                dim_out=args.num_classes)
+    elif args.model == 'lenet':
+        # LeNet5
+        global_model = LeNet()
+     
     else:
         exit('Error: unrecognized model')
 
