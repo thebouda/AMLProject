@@ -2,12 +2,12 @@ import torch
 import torch.nn as nn
 import fedAvg
 from torchvision import datasets, transforms
-from lenet5_ import LeNet
+from lenet5 import LeNet
 from datetime import datetime
 
 # check for cuda
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
-EPOCHS = 2
+EPOCHS = 10
 BATCH_SIZE = 32
 LEARNING_RATE = 1e-3
 N_CLIENTS = 3
@@ -73,8 +73,8 @@ def get_accuracy(model, data_loader, device):
         model.eval()
         for X, y_true in data_loader:
 
-            X = X.to(device)
-            y_true = y_true.to(device)
+            # X = X.to(device)
+            # y_true = y_true.to(device)
 
             _, y_prob = model(X)
             _, predicted_labels = torch.max(y_prob, 1)
@@ -148,22 +148,22 @@ test_loader = torch.utils.data.DataLoader(datasets.CIFAR10('./data', train=False
             ), batch_size=BATCH_SIZE, shuffle=True)
 
 model = LeNet()
-optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
+optimizer = torch.optim.SGD(model.parameters(), lr=LEARNING_RATE)
 criterion = nn.CrossEntropyLoss()
 #criterion = nn.nll_loss()
 
-# model, optimizer, (train_losses, valid_losses) = training_loop(model, criterion, optimizer,
-#                         train_loader, test_loader, EPOCHS, DEVICE)
+model, optimizer, (train_losses, valid_losses) = training_loop(model, criterion, optimizer,
+                        train_loader, test_loader, EPOCHS, DEVICE)
 
-model_dict, optimizer_dict, criterion_dict = fedAvg.create_clients_model(N_CLIENTS, LEARNING_RATE)
+#model_dict, optimizer_dict, criterion_dict = fedAvg.create_clients_model(N_CLIENTS, LEARNING_RATE)
 
 # train
-for i in range(N_CLIENTS):
-    model_dict[str(i)], optimizer_dict[str(i)], (train_losses, valid_losses) = training_loop(model_dict[str(i)], criterion_dict[str(i)], 
-            optimizer_dict[str(i)], train_loader, test_loader, EPOCHS, DEVICE)
+# for i in range(N_CLIENTS):
+#     model_dict[str(i)], optimizer_dict[str(i)], (train_losses, valid_losses) = training_loop(model_dict[str(i)], criterion_dict[str(i)], 
+#             optimizer_dict[str(i)], train_loader, test_loader, EPOCHS, DEVICE)
 
-model = fedAvg.update_main_model(model, model_dict, N_CLIENTS)
-with torch.no_grad():
-    model, valid_loss = test(test_loader, model, criterion, DEVICE)
-    test_acc = get_accuracy(model, test_loader, DEVICE)
-    print(f'Valid loss: {valid_loss:.4f}\t'f'Valid accuracy: {100 * test_acc:.2f}')
+# model = fedAvg.update_main_model(model, model_dict, N_CLIENTS)
+# with torch.no_grad():
+#     model, valid_loss = test(test_loader, model, criterion, DEVICE)
+#     test_acc = get_accuracy(model, test_loader, DEVICE)
+#     print(f'Valid loss: {valid_loss:.4f}\t'f'Valid accuracy: {100 * test_acc:.2f}')

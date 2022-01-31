@@ -2,7 +2,7 @@
 
 import torch
 import torch.nn as nn
-from lenet5_ import LeNet
+from lenet5 import LeNet
 
 def create_clients_model(n_clients, learning_rate):
     model_dict = dict()
