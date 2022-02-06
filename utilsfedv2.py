@@ -172,3 +172,57 @@ def training_loop(centralizedModel, federatedModels, criterion, optimizers, trai
               f'Train accuracy: {100 * local_train_acc_avg:.2f}\t'
               f'Valid accuracy: {100 * local_valid_acc_avg:.2f}')
     return centralizedModel, federatedModels, optimizers, (global_train_losses, global_valid_losses), (global_train_accuracies, global_valid_accuracies)
+
+
+# def partitionData(dataset, datadir, logdir, partition, n_parties, beta=0.4):
+    
+#     min_size = 0
+#     min_require_size = 10
+#     K = 10
+#    
+#     N = y_train.shape[0]
+#     np.random.seed(2020)
+#     net_dataidx_map = {}
+
+#     while min_size < min_require_size:
+#         idx_batch = [[] for _ in range(n_parties)]
+#         for k in range(K):
+#             idx_k = np.where(y_train == k)[0]
+#             np.random.shuffle(idx_k)
+#             proportions = np.random.dirichlet(np.repeat(beta, n_parties))
+#             # logger.info("proportions1: ", proportions)
+#             # logger.info("sum pro1:", np.sum(proportions))
+#             ## Balance
+#             proportions = np.array([p * (len(idx_j) < N / n_parties) for p, idx_j in zip(proportions, idx_batch)])
+#             # logger.info("proportions2: ", proportions)
+#             proportions = proportions / proportions.sum()
+#             # logger.info("proportions3: ", proportions)
+#             proportions = (np.cumsum(proportions) * len(idx_k)).astype(int)[:-1]
+#             # logger.info("proportions4: ", proportions)
+#             idx_batch = [idx_j + idx.tolist() for idx_j, idx in zip(idx_batch, np.split(idx_k, proportions))]
+#             min_size = min([len(idx_j) for idx_j in idx_batch])
+#             # if K == 2 and n_parties <= 10:
+#             #     if np.min(proportions) < 200:
+#             #         min_size = 0
+#             #         break
+
+
+#     for j in range(n_parties):
+#         np.random.shuffle(idx_batch[j])
+#         net_dataidx_map[j] = idx_batch[j]
+
+#     traindata_cls_counts = record_net_data_stats(y_train, net_dataidx_map, logdir)
+#     return (X_train, y_train, X_test, y_test, net_dataidx_map, traindata_cls_counts)
+
+# def record_net_data_stats(y_train, net_dataidx_map, logdir):
+
+#     net_cls_counts = {}
+
+#     for net_i, dataidx in net_dataidx_map.items():
+#         unq, unq_cnt = np.unique(y_train[dataidx], return_counts=True)
+#         tmp = {unq[i]: unq_cnt[i] for i in range(len(unq))}
+#         net_cls_counts[net_i] = tmp
+
+#     logger.info('Data statistics: %s' % str(net_cls_counts))
+
+#     return net_cls_counts

@@ -64,10 +64,18 @@ transform_test = transforms.Compose([
 traindata = datasets.CIFAR10('./data', train=True, download=False,
                              transform=transform_train)
 
+# divide the dataset in partitions
+xTrain = np.array(traindata.data)
+yTrain =np.array(traindata.targets)
+
+N = yTrain.shape[0]
+
 
 # Dividing the training data into num_clients, with each client having equal number of images
 traindata_split = torch.utils.data.random_split(traindata, [int(traindata.data.shape[0]
                                                                 / NUM_CLIENTS) for _ in range(NUM_CLIENTS)])
+
+
 
 # Creating a pytorch loader for a Deep Learning model
 train_loader = [torch.utils.data.DataLoader(
