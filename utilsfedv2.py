@@ -87,16 +87,20 @@ def client_update(model, optimizer, train_loader, device, criterion, epochs):
     return train_loss
 
 
-def server_aggregate(global_model, client_models):
+def server_aggregate(global_model, client_models, lengths):
     """
     This function has aggregation method 'mean'
     """
     # This will take simple mean of the weights of models
-    global_dict = global_model.state_dict()
 
+    totLength= float(sum(lengths))
+    global_dict = global_model.state_dict()
     for k in global_dict.keys():
-        global_dict[k] = torch.stack([client_models[i].state_dict(
-        )[k].float() for i in range(len(client_models))], 0).mean(0)
+        globDict = 0
+        for i in range (len(client_models)):
+            globDict += client_models[i].state_dict()[k].float() * float(lengths[i]) / totLength
+        global_dict[k] =globDict
+            
 
     global_model.load_state_dict(global_dict)
 
@@ -125,6 +129,7 @@ def training_loop(centralizedModel, federatedModels, criterion, optimizers, trai
         local_train_accuracies = []  # Local train accuracies of the clients in this round
         # Local validation accuracies of the clients in this round
         local_valid_accuracies = []
+        local_len = []
 
         for i in range(num_selected):
             # Train federated model locally in client i for num_epochs epochs
@@ -143,8 +148,11 @@ def training_loop(centralizedModel, federatedModels, criterion, optimizers, trai
 
             local_valid_losses.append(local_valid_loss)
             local_valid_accuracies.append(local_valid_acc)
+            lenDataLoad = len(train_loader[client_idx[i]]) # number of images
+            local_len.append(lenDataLoad) # gets the number of images per data loader
 
-        server_aggregate(centralizedModel, federatedModels)
+
+        server_aggregate(centralizedModel, federatedModels, local_len)
 
         # Calculate avg training loss over all selected users at each round
         local_train_loss_avg = sum(

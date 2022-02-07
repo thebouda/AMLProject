@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 
+import random 
 
 from utilsfedv2 import *
 from lenet5 import LeNet
@@ -20,14 +21,16 @@ DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 LEARNING_RATE = 2e-3  # LR
 BATCH_SIZE = 32
 ROUNDS = 10  # R
-LOCAL_EPOCHS = 10  # E
-NUM_CLIENTS = 20  # K: number of total clients
+LOCAL_EPOCHS = 5  # E
+NUM_CLIENTS = 10  # K: number of total clients
 C = 0.3  # percentage of clients selected at each round
 # m = C * K : number of  clients selected at each round
 NUM_SELECTED = max(int(C * NUM_CLIENTS), 1)
 
 # Save plots in the folder ./plots or show them
 SAVE_PLOTS = True
+# If the clients have different numbers of images or not
+DIFFERENT_SIZES = False 
 
 # Use batch normalization or not
 BATCH_NORM = False
@@ -63,17 +66,38 @@ transform_test = transforms.Compose([
 # Loading CIFAR10 using torchvision.datasets
 traindata = datasets.CIFAR10('./data', train=True, download=False,
                              transform=transform_train)
+# print(traindata)
+total_data = traindata.data.shape[0] # number of data
+if DIFFERENT_SIZES:
+    # Dividing the training data into num_clients, with each clients having different number of images
+    delta = 500 # controls how much the images numbers can vary from client to client
+    min_val = max(int(total_data/ NUM_CLIENTS) - delta, 1) # min value of number of images for each client
+    max_val = min(int(total_data/ NUM_CLIENTS) + delta, total_data - 1) # max value of number of images for each client
 
-# divide the dataset in partitions
-xTrain = np.array(traindata.data)
-yTrain =np.array(traindata.targets)
+    indices = list(range(NUM_CLIENTS)) # list of indices for the splits of the data
+    lengths = [random.randint(min_val,max_val) for i in indices] # List of lengths of splits to be produced
 
-N = yTrain.shape[0]
+    diff = sum(lengths) - total_data # we are off by this abount 
 
+    # Iterate through, incrementing/decrementing a random index 
+    while diff != 0:  
+        addthis = 1 if diff > 0 else -1 # +/- 1 depending on if we were above or below target.
+        diff -= addthis
 
-# Dividing the training data into num_clients, with each client having equal number of images
-traindata_split = torch.utils.data.random_split(traindata, [int(traindata.data.shape[0]
-                                                                / NUM_CLIENTS) for _ in range(NUM_CLIENTS)])
+        idx = random.choice(indices) # Pick a random index to modify, check if it's OK to modify
+        while not (min_val < (lengths[idx] - addthis) < max_val): 
+            idx = random.choice(indices) # Not OK to modify.  Pick another.
+
+        lengths[idx] -= addthis #Update that index.
+    
+    print("Number of Images for each client:")
+    print(lengths)
+    
+    traindata_split = torch.utils.data.random_split(traindata, lengths)
+
+else:
+    # Dividing the training data into num_clients, with each client having equal number of images
+    traindata_split = torch.utils.data.random_split(traindata, [int(total_data/ NUM_CLIENTS) for _ in range(NUM_CLIENTS)])
 
 
 
