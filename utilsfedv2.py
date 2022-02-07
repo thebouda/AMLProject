@@ -115,6 +115,7 @@ def training_loop(centralizedModel, federatedModels, criterion, optimizers, trai
 
     global_train_accuracies = []  # Average train accuracies between clients
     global_valid_accuracies = []  # Average validation accuracies between clients
+    local_len = []
 
     # Train model
     for round in range(rounds):
