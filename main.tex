@@ -1,0 +1,39 @@
+\documentclass[twocolumn]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+\title{Federated Learning where machine learning and data privacy coexists
+\\AML Project}
+% \title{AMLProject} \maketitle
+\author{Giuseppe Salvi |
+Basiten Bartholom |
+Alfredo Baldó Chamorro}
+\date{February 2022}
+
+\begin{document}
+
+\maketitle
+
+\section{Abstract}
+\section{Introduction} %mandatory
+\section{Related Work} %mandatory
+\section{Methods} %mandatory describe algorithms
+here we should describe the algorithms we used
+why lenet why average
+
+Federated learning applied in the real world, would take into account multiple devices with different characteristics (CPU capacity and speed...). The model and algorithm selection was chosen counting on the variety of devices if the model would be deployed. 
+
+With that in mind, for the neural network we chose a short one: LeNet5 (put reference), with the following structure:
+
+Regarding the aggregation of the loss function on the server side, we chose the Federated Average Algorithm (FedAvg)  (PUT REFERENCES). The weights of the FedAvg where proportional to the number of images each client saw (PUT FORMULA?).
+
+Moreover, in order to simulate real world data, we implemented into the code a variability regarding the distribution of the data among clients. The variable added some randomness to the quantity of data that each client would be seeing. 
+
+\section{Experiments} % mandatory
+\subsection{Group Normalization}
+\subsection{Batch Normalization}
+\subsection{Dirichlet distribution}
+\section{Parameters}
+
+
+\end{document}
