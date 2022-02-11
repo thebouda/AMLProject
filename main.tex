@@ -1,55 +1,857 @@
-\documentclass[twocolumn]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
-
+\documentclass[twoside,a4paper,12pt]{report}
 
 \usepackage{graphicx}
-\graphicspath{ {latexIMG/} }
+\usepackage{float}
 
-\title{Federated Learning where machine learning and data privacy coexists
-\\AML Project}
-\author{Giuseppe Salvi |
-Basiten Bartholom |
-Alfredo Baldó Chamorro}
-\date{February 2022}
+\usepackage{amsmath}
+\usepackage{appendix}
+\usepackage{nameref}
+\usepackage{url}
+\usepackage{makecell}
+
+
+
+
+%\def\UrlBreaks{\do\/\do-}
+%\Urlmuskip=0mu plus 1mu
+
+\usepackage[
+backend=biber,
+style=alphabetic
+]{biblatex}
+
+% \setcounter{biburllcpenalty}{7000}
+% \setcounter{biburlucpenalty}{8000}
+ \usepackage[T1]{fontenc} 
+ 
+ 
+ \usepackage[final]{microtype}
+% \emergencystretch=1em
+ \graphicspath{ {images/} }
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,english]{babel}
+
+
+\addbibresource{references.bib}
+
+\usepackage{titlesec}
+
+%\setcounter{secnumdepth}{4}
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+ 
+\setlength{\parindent}{4em}
+\setlength{\parskip}{1em}
+\renewcommand{\baselinestretch}{1.3}
+
+\usepackage{indentfirst}
+
+%\usepackage{mathptmx}
+
+
+% \usepackage{listings}
+%\usepackage{xcolor}
+ 
+\usepackage[]{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ inner=25mm,
+ outer=25mm,
+ top=25mm,
+ bottom=25mm
+ }
+ 
+
+\usepackage{csquotes}
 
 \begin{document}
+\tableofcontents
+\listoffigures  % what for?
+\setcounter{section}{0}
+\chapter{Introduction}
+    \section{Objective} 
+    The raison d'être of this project, is the vast amount of plastic that is thrown away that  contributes and enhances the pollution of Thailand. Dealing with the actual situation, identifying what are the reasons and finding a solution to this problem, will be the main goal of this program.
 
-\maketitle
+    \section{Motivation}
+    On one side, the possibility of witnessing an enormous transformation is very tempting, even more if you make part of it. Thailand being an emerging country, it enhances the interest of creating the project, before the problem escalates even more.
 
-\section{Abstract}
-\section{Introduction} %mandatory
-\section{Related Work} %mandatory
-\section{Methods} %mandatory describe algorithms
-There are various steps in the building of the final algorithm. In this section we will explain the decisions that led us to choose the values for the parameters and our choice for different algorithms implemented. 
+    On the other side, even though plastic pollution and recycling are very present in occidental society, it's not the case for Asia. Therefore, dealing with environmental issues, and being able to contribute to the plastics problem, is more appealing. Moreover, this work  can be inspiring for similar problems in other countries.
+\clearpage
 
-Federated learning applied in the real world, would take into account multiple devices with different characteristics (CPU capacity and speed...). The model and algorithm selection was chosen on the basis of a hypothetical implementation on different devices.  
+\chapter{State of the art}
+\section{Introduction}
+In order to be capable of dealing with this issue, we should, first identify and then classify what are the reasons of the actual situation.
 
-\subsection{Problem setup}
-Federated Learning, consist on a client and server side. Considering the CIFAR10 dataset consisting of 60 000 samples, we thought that a number of clients K = 100 would be representing a real world case (averaging 600 images per client). 
-
-Moreover, in order to simulate real world data, we implemented into the code a variability Delta regarding the distribution of the data among clients. The variable added some randomness to the quantity of data that each client would be seeing. 
-
-To add up, the distribution of data was considered to be performed randomly(IS IT TRUE?CONFIRM). The variability Delta introduced was not great, and this was done intentionally. The problem of some client having way bigger amount of images (2-3 times) than others would have been solved with the creation of additional virtual clients and splitting the data among them. 
-\subsection{Network}
-
-With that in mind, for the neural network we chose a variation of LeNet5 which has two 5×5, 64-channel convolution layers, each precedes a 2×2 max-pooling layer, followed by two fully-connected layers with 384 and 192 channels respectively and finally a softmax linear classifier (REFERENCE TO PAPER 3 an insert image if possible). 
-
-The implementation of our model takes place in different devices, each having a different computational capacity, we chose a small and simple network in order for the computation to be the quickest possible but also having the capacity to gather information from the client's dataset.
-
-\subsection{Algorithm}
-Regarding the server aggregation we chose to go with the Federated Average algorithm (FedAvg). The FedAvg (PUT FORMULA AND REFERENCES) consists on aggregating the weights of the clients according the number of images each client sees, with respect to the total number of images of the dataset.(SPECIFIY MORE AND CORRECT)
-The FedAvg algorithm is simple, but useful enough in order to get an acceptable accuracy.
-
-SPEAK ABOUT THE FEDERATED AVERAGE MOMENTUM ALGO
-
-We could say in our report that we considered low difference in the splits because with bigger differences we could have split  the clients in more virtual clients, that has the same result of increasing the number of numclients and selectedclients
-
-\section{Experiments} % mandatory
-\subsection{Group Normalization}
-\subsection{Batch Normalization}
-\subsection{Dirichlet distribution}
-\section{Parameters}
+As a first step, it is necessary to identify the types of plastics. This is due to the fact that further in the project we will be able to classify them and to treat them accordingly to their characteristics. There are two types of plastics: Thermosets and Thermoplastics as we can see in image \ref{fig:Typesofplastic}.
 
 
-\end{document}
+\begin{figure}
+    \centering
+    \includegraphics[width=.6\textwidth,height=.2\textheight]{types_of_plast.PNG}
+    \caption{Self-made table of types of plastics by category}\cite{Plas19}
+     \label{fig:Typesofplastic}
+\end{figure}
+
+
+Currently, it's unthinkable to go on a day without perceiving the presence of plastic. The demand, due to plastic's properties, has been rising ever since it was invented and marketed.
+As in any market, the demand needs to be met by the offer, influencing therefore the production. In 2018, the  world production has reached 358 tonnes of plastic (an increase of 3\% over 2017)\cite{Plas19} (this includes Thermoplastics, Polyurethanes, Thermosets, Elastomers, Adhesives, Coatings and Sealants
+and PP-Fibers. Not included: PET-fibers, PA-fibers and Polyacryl-fibers).
+
+As society moves forward, technological advances contributes to the amelioration, in this case, of plastic production. However, contrary to what it may seem, the countries responsible of the manufacture of these materials are not the leaders in technological advances (western countries, Japan and Korea). In order to get to know the actual situation, it is certainly interesting to start with a bigger picture. As we can see in image \ref{fig:Gloplastproduction}, it's Asia who takes the lead in production, with China as its motor \cite{Plas19}.
+
+
+\begin{figure}
+     \centering
+     \includegraphics[width=0.6\textwidth,height=.3\textheight]{Gobal_plastic_production.PNG}
+     \caption{Global plastic production by zones}\cite{Plas19}
+      \label{fig:Gloplastproduction}
+\end{figure}
+
+Asia is responsible of 51 \% of the global production. In order to fully understand what this suggest, we should have a look at the image \ref{fig:glo_plast_prod}. With a global production of 362,5 million tonnes (excluding Europe)\cite{PlasResinProd}, this translates to a production of 185 million tonnes produced in 2018 in Asia. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth,height=.4\textheight]{Figure_1_Plastics_production_from_1950_to_2018.png}
+    \caption{Global plastic production}\cite{PlasResinProd}
+     \label{fig:glo_plast_prod}
+\end{figure}
+
+
+
+%Getting a global overview of the actual situation of plastic production is in fact very helpful to draw a picture of the possibilities to reduce those quantities.
+
+ DEJAR PARA EL FINAL VER SI SE PUEDE HACER ALGO CON LAS FACTORIAS DE PLASTICO EN TAILANDIA QUE YA VAN A QUEBRAR https://www.straitstimes.com/asia/se-asia/thailands-plastic-bag-ban-put-1000-factories-in-dire-straits
+%Getting an insight in the production's quantities and percentages is in fact really helpful, however the real  for AAJDJSA
+%It's true that production is a characteristic that helps to create an idea of the impact in Thailand. However, it's not the only one. In fact,if not well treated, plastic scrap importation leads to greater environmental deterioration.
+
+% SEGUIR POR ESTE CAMINO
+% A PESAR DE QUE SE ESTÉ RECICLANDO PUEDEN IMPLICAR MAYORES POLUCIONES O QUE NO SE LLEVAN A CABO
+% ER SI HAY POLITICA DE MERCADO, DE VOMPRA VENTA DE PLASTICOS
+% VER SI ES EL MISMO PRODUCO QUE IMPORTAN Y EXPORTAN O SIN SON DIFERENTES
+
+
+% LOGISITICA OPTIMIZACION MODELO
+\subsection{Import and Export}
+Now that the global picture has been set, it is necessary to get to know Thailand's case.
+
+Taking a look at table \ref{fig:Thai_impexp_tons}, the quantity of plastic imported and exported is increasing since 2006. It is clear that the amount in exported is greater than imported. However, it is interesting to emphasize that exporting has only grown by 136\%, while importing an incredible 266\%, eventually catching up in a short time lapse. On the other side, Thailand additionally trades with plastic scrap for recycling. Additionally, it \ref{fig:Thai_impexp_scraptons} shows that the quantities are far lesser than plastic products, however it is still relevant data. The fact that it imports for recycling signifies the possibility of using infrastructures that are already available. But there is a clue, as the table \ref{fig:Thai_impexp_scraptons} states, the data is very irregular (from 0 to 450 tons yearly). It exposes that there is a lack of information in various years. This results in the absence of data, or what it may seem like abnormal variations in amounts of imports and exports. This questions the reliability of the data, therefore it seems necessary to bet in other resources too.
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth,height=.4\textheight]{Plathai_import_export_ton.PNG}
+    \caption{Self-made graph of Thailand plastic Import and Export in tons}\cite{PUI}
+     \label{fig:Thai_impexp_tons}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth,height=.45\textheight]{PlathaiSCRAP_import_export_ton.PNG}
+    \caption{Self-made graph of Thailand plastic scrap for recycling Import and Export in tons \cite{PUI}}
+     \label{fig:Thai_impexp_scraptons}
+\end{figure}
+As a matter of principle, having the capability to produce plastic can ease up the recycling and treatment part. This can lead to economic advantages and stimulate the process. Therefore, getting to know Thailand's industry is crucial. 
+
+%\begin{figure}[h]
+    %\centering
+    %\includegraphics[width=.6\textwidth,height=.4\textheight]{thailand_pl%astic_industry.PNG}
+  %  \caption{Thailand plastic proportions from 2007 to 2018}\cite{Prop18}
+ %    \label{fig:thaiplastprop}
+%\end{figure}
+
+% BASURRA,  la tabla no sirve para nada en vez de ponerla entera con los años poner la media
+%As we can see in table \ref{fig:thaiplastprop}, on one side, the importation of plastic has been fairly constant with a mean of 64 \%. On the other side, the exportation of plastic has been lower but with a consistent values too (mean: 35 \%). These numbers imply that it has the capability to produce plastic in its country, and even to export its production. 
+
+Finally, with regard to the actual situation of Thailand's industry, the table \ref{pp_thai_percent} puts up one major issue: two industries are responsible for more than 60\% of plastic consumption. Without surprise, the Packaging Industry takes the lead, with a mean of 46\%, followed by the Construction Industry consuming 17\%. Additionally, the distribution being very stable through six years, it seems reasonable for the moment, to assume that these values will keep the same path.
+
+Fortunately, having two areas of action holding two-thirds of the consumption, generates a a great opportunity of impact.
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth,height=.4\textheight]{thai_plasct_industry_consump.PNG}
+    \caption{Use of plastic by application in \% \cite{CLusterplastprod}}
+     \label{pp_thai_percent}
+\end{figure}
+
+% SACAR LAS IMPORTACIONES Y EXPORTACIONES EN CANTIDADES totales y añadir Y POR PAISES QUE EXPORTAN/IMPORTAN
+
+\section{Production and Consumption}
+Thailand does import plastic products, however it also produces.
+The table \ref{prodtonsthai} states a steady production of PE, PP and PET resins, resulting in a approximate outcome of 3.6 million, 2 million and 0.8 million tons respectively of material produced each year. 
+Making a connection with the graph \ref{consumpttonsthai}, that displays the domestic consumption by products, it clearly puts a light on the fact that Thailand consumes most of what it produces, therefore exporting small quantities.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth,height=.4\textheight]{domsales_thai.PNG}
+    \caption{Self-made graph of Thailand's plastic domestic consumption \cite{OffiIndustEcon}}
+     \label{consumpttonsthai} 
+\end{figure}
+
+On the other side, Thailand's Plastic Institute, through the figure \ref{plastats2018resin_consumption}, presents that the country consumed amounts that are between 3300 kilotons (2009) and 5500 kilotons (2018) per year, resulting nearly in a 1,5\% of world's production. These quantities seem unimpressive, however the right comparison should be made.
+
+Germany, which demanded 12.8 million tons of plastic in 2018 \cite{Plas19} (3.5\% of 358 million tons world's production taken by figure \ref{fig:Gloplastproduction}), had in 2018 a GDP per capita of 47662 \$ (US dollars) compared to Thailand's 7448 \$ \cite{IMFweo2019}. Therefore, if we divide the quantities of plastic by the GDP per capita (in thousands of dollars), it results in a ratio of 0.2685 for Germany and 0.738 for Thailand. The previous statements clearly puts a light on the fact that Thailand is a great consumer of plastic (2.75 times greater tan Germany in terms of GDP per capita).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth,height=.3\textheight]{production_thai.PNG}
+    \caption{Self-made graph of Thailand's plastic production \cite{OffiIndustEcon}}
+     \label{prodtonsthai} 
+\end{figure}
+
+Additionally, the graphics \ref{plastats2018resin_consumption}, helps to get more into detail within Thailand's intern plastic consumption. The relevantt information that can be taken from this graph is that there are 4 main substances that are majorly used: HDPE(High density Polyethylene), LLDPE (Linear low-density Polyethylene), PP, PVC (Polyvinyl chloride). 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth,height=.35\textheight]{chart.png}
+    \caption{Plastic resin consumption by types \cite{Plastats2018}}
+     \label{plastats2018resin_consumption} 
+\end{figure}
+
+% \section{Areas of use}
+
+% ver aqui con thaiplastic indutr
+
+% As stated formerly, the applications of greatest use are Construction and Packaging Industry. 
+% A key parameter of this project is where to concentrate the resources to ensure an optimal usage of them deriving in a greater impact. Therefore, it is critical to recognize the areas where plastic is most used.
+
+
+\section{Environmental Situation}
+Thailand's environmental situation is a multiple variable result, not only caused by plastic use. However, depending on the location and the type of contamination, the issues can be faced specifically. 
+
+Taking the European Air Quality Standards as a reference, the comparison made with the measurements made by the Pollution Control Department in Thailand stated in table \ref{Aircont_thai}, shows that there are some clearly affected regions: surpassing by 30\% the quality standards in PM2.5 and PM10. The most affected region appear to be the Lampang Province and Chiang Mai Province with measurements 2.4 times higher referring to PM10 and up to 4 times the PM2.5 standard.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.15\textheight]{contaminacion_aire.PNG}
+    \caption{Air contamination \cite{PCD_air}\cite {Air_qua_stdd}}
+     \label{Aircont_thai} 
+\end{figure}
+
+Moreover, water's situation presents some similarities. Although some areas have good quality index (WQI), the points that are more interesting are those where the WQI is poor. The table \ref{WQI_thai} presents the WQI \cite{Wa_qua_thai}. Finally it seems interesting that Bangkok's area, out of nine points of measurements take from the Chao Phraya River, eight are below 'OK': six are 'Wane' and two considered 'Very Deteriorated'. It can be clearly seen that the condition in this area are very inadequate. This leads to other problems, such as sea contamination and deterioration of the environment: the Chao Phraya River disembogues directly to the gulf of Thailand (open waters).  
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.15\textheight]{wqicriteria.PNG}
+    \caption{Water Quality Index criteria \cite{Wa_qua_thai}}
+     \label{WQI_thai} 
+\end{figure}
+
+
+\section{Waste}
+As presented previously, the area of Bangkok has serious problems in water contamination. Additionally, the Pollution Control Department (PCD) registered in the year 2018 that Bangkok had 27\% of the total number of pollution complaints \cite{PolCompl2018}. 
+
+\subsection{Channels}
+Thailand has 2786 active sites  along the country for the waste treatment (private and government managed). Out of those sites, 647 are proper municipal solid waste disposal and transfer sites. The most interesting part was that Thailand, in 2018, had 412 dumps, 27 ovens with integrated system of control of air pollution and 6 ovens to produce energy (only privately managed). Additionally, out of the collection of waste in 2018, mentioned previously, there was a huge amount of waste incorrectly managed (illegal dumping, open burning...): 7,32 million tons (26\% of total waste generated). Moreover, there was approximately two million tons of plastic waste in 2018, however only 0,5 million tons have been  recycled mostly into plastic bottles. This data sets up a possibility of improvement \cite{PCD_poll2018}.
+
+\subsection{Origins}
+\subsection{Strategic points}
+In this section we could deal with sites where the pollution/contamination due to the plastics (or not) is important (enormous)
+
+The objective being to come up with possible solutions to the plastic waste generated in Thailand, the project would benefit from locating the main areas of pollution, starting with rivers (and maybe specific river locations). Then it could be complemented with air pollution sites.
+
+In order to locate the main polluted rivers, the sites had to be classified as "Very Deteriorated" by the Pollution Control Department. The results are shown in the table \ref{WQI_basins_thai}. As it can be clearly seen in the table, the worst cases are the Chao Phraya River  and the Tha Chin Basin, which both disembogues in the Gulf of Thailand. Moreover, according to The Ocean Cleanup, the Chao Phraya is responsible for 6,7 million kg/year of plastic emission \cite{TOC_rivers}.
+ver si poner coastal water quality
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth,height=.15\textheight]{wqi_thairiver.PNG}
+    \caption{Water quality in different basins \cite{Wa_qua_thai}}
+     \label{WQI_basins_thai} 
+\end{figure}
+
+
+\section{Causes}
+\subsection{Socio-cultural aspects}
+Why is socio-cultural a relevant variable? Habits result in considering littering as normal or unnecessary plastic use that end up in the sea. We can take as example the fact that in 2018, out of 569 657 pieces of trash (thirty three tons) extracted from the sea, plastic bags amounted to 18,9\%, thin plastic bags to 8,4\% and straws to 4,6\% \cite{PCD_poll2018}.
+
+\subsection{Policies}
+Recently Thailand's government has taken some important decisions in order to reduce contamination and plastic use. 
+The government has created a road-map from 2018 to 2030 with the objectives of pollution management. Regarding plastic management, the main goal is to focus on single-use plastic and plastics scraps imported \cite{PCD_poll2018}. These intentions will be detailed below.
+
+\begin{enumerate}
+    \item Single-use reducing steps:
+    \begin{itemize}
+        \item Stop using cap seals by 2019
+        \item Stop using oxo-contained plastic products by 2019
+        \item Stop using plastic microbeads  by 2019
+        \item Stop using plastic shopping bags with <36-micron thickness by 2022
+        \item Stop using foam meal boxes by 2022
+        \item Stop using single-use plastic cups with <300-micron thickness by 2022
+        \item stop using plastic straws by 2022
+    \end{itemize}
+    \item Plastic Scraps
+    \begin{itemize}
+        \item Stop the import of plastic scraps from overseas within 2 years (2019-2020)
+        \item Increase strictness in law enforcement, as well as monitoring and controlling import routes
+    \end{itemize}
+\end{enumerate}
+
+%By now, the government has c
+\subsection{Economic factors}
+\section{Actual residues treatment}
+As in the year 2018, there are 35 power plants that amount to 313.354 MW
+\section{Other residues ?}
+
+\chapter{New perspective}
+After working on the previous information, it is clear that plastic situation is a problem in this country. This issue affects affects the area and inhabitants with collateral damages such as water pollution and environmental deterioration. Therefore this section is going to explain how to handle plastic contamination in various aspects: water contamination, residues treatment and social steps.
+
+In order to face the issue in a proper manner, two general phases should be taken into account: prevention of the same mistakes made and resolving the actual problem. These two procedure will lead the way in the cases that are going to be shown.
+
+Moreover, in order to face the issue, some measures need to be taken in each step of the  plastic life (see image \ref{plalifepros} ). 
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth,height=.4\textheight]{life-cycle-plastic.PNG}
+    \caption{Plastic life processes}
+     \label{plalifepros} 
+\end{figure}
+
+%\section{Disposal}
+\section{PET Bottles}
+Why PET Bottles as a main area of action? On one hand it is due to the fact that PET can be entirely recycle. On the other hand, Thailand in 2017 was the 7th country worldwide in bottled water consumption with 3966 millions of gallons \cite{Bwr17}. 
+Due the lack of Life Cycle Inventory (LCI) data, the following study will be made from other Life Cycle Assessment (LCA) case studies.
+
+There are 4 steps in this program:
+\begin{enumerate}
+    \item Drop-off a recycling facilities
+    \item G
+\end{enumerate}
+
+\subsection{Collecting system} % ver si ponerlo asi
+At present, there is a company name Wongpanit (buy-back centre)who deals with buying recycled waste. The systems consists in buying waste at a variable price (updated each day) depending on the product. Any person can bring their own waste and sell it. The concern about it is the lack of store availability.
+
+The collecting system has to rely on different steps in order to obtain a considerable recycling rate. That is the main reason to create a better curbside recycling system complemented by a collaboration with retail stores and buy-back centres; the retail stores will mainly contribute to the PET recycling system, the others to the whole waste management. In order to get a decent amount of recycling rate, it is crucial to target the largest amount of citizens. It has been found that the main reasons for people to get involved in recycling are getting money out of it (51\% of the poll) and the awareness that it was favorable for the environment (31 \% of the poll). On the other side, the main reasons not to recycle where that there is no place at home and haven't got time to do it (33\% for both). Out of this study, it is important to note that 17\% didn't recycle by reason of not knowing where to sell the waste \cite{Wen2014} (note: in the poll, multiple choices could be selected). The main ideas that can be extracted from this study are that the image of recycling has to be switched as it is easier than it seems and people have to get their waste's worth by being able to sell it easily, with information about how to do it. 
+
+\subsubsection{Retail stores}
+This part of the process seems the most accessible, as it consist on creating policies and convincing retailers. Only 7-eleven has 11 700 stores in Thailand which is very helpful due to its accessibility around the country. Other retailers, such as K-mart have a great amount of stores. Finally, there are also small business retailers that consist of the great majority of the retail commerce in Thailand. This amount of stores facilitates therefore the accessibility to a bottle return policy.
+
+In order to ease to the creation of the process, this is the approach recommended:
+\begin{enumerate}
+    \item Have the full network of retail stores by registering them with their respective location
+    \item Give the opportunity to any retailer to register and unregister as a drop off location for PET bottles, but each retailer have to get the bottles to a buy-back centre / recycling centre (this method of freely registering and unregistering would force to have an up to date list).
+    \item Create an application where the location of all the retail stores participating in the process would be shown with the buy-back pricing. In order to the market to be honest, citizens can corroborate the price settled in each store through the application.
+\end{enumerate}
+
+At first, it is expected that the demand for registering as a PET collector would peak, but this event would naturally decrease and eventually get to a balance between demand a offer. This project strongly advises against the restriction of retailer registration.
+
+Aiming to reinforce this statement, and opposing to this measure, restriction is going to be assumed as a feasible measure and analyze the consequences. These would be the resulting steps:
+\begin{enumerate}
+    \item Create a full network of the retailers.
+    \item Create possible candidates to the recycling process by: location, population density and facilities.
+    \item Creating unequal opportunities among retailers, resulting in an unfair selection.
+    \item The number of locations would be limited to governmental decision, resulting in needs of deposits not facilitated or matched and therefore the declining of recycling rate.
+\end{enumerate}
+
+Generating unequal opportunities to participate in the process can lead to increase tension between retailers and the possibility of not responding to the demand correctly. Therefore it is recommended the first approach, equal opportunities and freedom of choice to register. 
+
+Ideally, each retail store location will available through the application. Furthermore, the structure can be organised in two manners, depending on the budget: electronically aided or cash. These different structures have on common characteristic: the pricing method. The three main stages will be explained hereunder.
+
+\begin{enumerate}
+    \item Price setting:
+    
+    The price will be set by the buy-back centres every morning; it is recommended to take into account the price posted and calculated by Wongpanit. Ideally, the price will fluctuate according the price of oil and demand and offer on a daily basis. It is important to note that the price of each buy-back centre can vary, as the price is set by the owner of the centre. On the other side, the price will be settled freely by each store, which will take into account that established by the centres. The retail stores will then receive the difference as benefits (price information is further explained in section \ref{appsection}).
+    
+    \item Cash:
+    
+    Cash relying system is very straight forward, every person that gets to a registered retail store, will get their money (cash) according to the price settled by the store. As the retailers needs to have a cognizance of the buy-back centre price, this should be update on a open access web page.
+    
+    \item Electronically aided:
+    
+    This system can be more complicated to settle but at the end it will be more secure. The main objective of it, is to remove the cash money handling and helping with transparency. The structure is displayed in image \ref{spepetbottle} and more details about the application idea in image \ref{Appstruc} and section \ref{appsection}. 
+    
+\end{enumerate}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth,height=.26\textheight]{collecting_sys_retail.PNG}
+    \caption{Specific PET bottle system}
+     \label{spepetbottle} 
+\end{figure}
+
+\subsubsection{Application} \label{appsection}
+The application would be working by the principle of blockchain: each step forward has to have a previously validated block. This way, there is transparency inside the process,  which can be very helpful to monitor the performance of each phase: if bottles are lost throughout the steps and the final outcome would be known. In each step, there would be specific information (see image \ref{Appstruc}) such as weight or number of bottles, and price sold. Price sold is critical as retailer have to be paid the difference between bottle price they bought at their store and price at which the buy-back facilities buys the bottles. As ere is already as system of buy-back, the price is a negotiable part between buy-back centres and retailers. Finally, as bottle price depends on the size of the bottle, an information spot should be created with the price for every bottle. An illustration example has been created see table \ref{exampproductapp}. As the project expands, more products can be added to the table.
+
+It is important to note that the price paid is only throw the app, therefore retailers and buy-back facilities never get to pay for anything, they just get directly the difference between the prices set. The only step that requires to pay the whole price of the bottle is the last step: the recycling facilities. This final step will  confirm the other previous in term of cash flows and will close the chain.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth,height=0.9\textheight]{app_struct.PNG}
+    \caption{Application structure}
+     \label{Appstruc} 
+\end{figure}
+
+
+\begin{table}
+\centering
+ \begin{tabular}{||c c||} 
+ \hline
+ \makecell{Product type} & \makecell{Price (Baht)/ Unit} \\ [0.5ex] 
+ \hline\hline
+ Clear 1 L PET water bottle & 5 \\
+ \hline
+ Clear 0.5 L PET water bottle & 3 \\
+ \hline
+ Green PET water bottle & 0.3 \\
+ \hline\hline 
+\end{tabular}
+\label{exampproductapp}
+\caption{Example of product information in the application}
+\end{table}
+
+On the other side, this system can prevent robberies to the retail stores o buy-back centres, as there is no cash involved. In order to keep up to date the application, a deposit every two weeks at maximum should be made, otherwise the application automatically unregisters and notifies the retailer.The details are explained figure \ref{Appstruc}.
+
+This method seems to have a heavy drawback as there are people without cellphones or bank accounts; where the money would be transferred. To the latter problem the solution proposed is the absence of needing a bank account to register. Signing up with a bank account should be optional to those users who would like the money transferred. Otherwise, the money generated form the buy-back program would remain in the application's account, and could be withdrawn in other grocery shops such as K-mart and 7-eleven, and even in retailers who are already registered. The currency would be the Thailand Baht.
+
+The problem then resides in those citizens and retailers that don't have mobile phones. The unique problem would be that they do not have access to the application and therefore could not register, but still, they can drop the bottles in the buy-back centres, although their stores wouldn't be mapped in the application as a buy-back location. Finally, the voucher system could be amplified to other stores with incentives provided by the state and therefore encourage recycling.
+
+
+
+\subsubsection{Buy-back centres}
+The facilities will complement the curbside recycling program. The centres, will not only buy PET bottles but recyclable waste: paper, metal... These centres can also register in the application mentioned previously; it would be recommended as to finally acquire a greater perspective of the whole recycling structure. Moreover, if the buy-back centres do not register throw the application the bottle recycling system could not be established. There are two main variables in the construction of these facilities: capacity and area. The importance of smaller areas will increase in high density cities, whereas in smaller town the area wouldn't be an issue. 
+
+Thailand reported 28.7 million tonnes of solid waste generated in 2019 \cite{PCDpolstate2019}. Which translates to 413 tonnes/year of waste per capita, 80 617 tonnes/day or 1.16 kg/capita per day. Out of that quantity, 50\% is organic waste, which will not be treated by the buy-back centres. As these facilities being a complement to curbside, there is no need to be able to deal with the whole generation of waste. And it would be reasonable to state that at maximum, the facilities would have to deal with a 20\% of the the waste, resulting in 0.116 kg/capita daily.
+
+It seems like the right approach should be different facilities depending on the density of population. 
+Due to the fact that this issue can be dealt with multiple approaches it will be taken into account multiple scenarios, taking into account that the waste to be managed is 14.35 million tons a year (removed organic waste) and that the percentage of  waste to be managed will be 10 \% or 20\%.
+
+Note: in order to calculate the land use of Thailand, permanent crops, cultivated land and arable land (79.2\% of total land) have been subtracted from the total land, resulting in 106 729 km2.
+
+\begin{table}
+\centering
+ \begin{tabular}{||c c c||} 
+ \hline \hline
+ \makecell{Capacity of buy-back (kg/day)} & \makecell{Area to be covered by facility (km2)} &  Total facilities \\ [0.5ex] 
+ \hline\hline
+ 100 & 1067 & 40   \\ 
+ \hline
+ 200 & 2135 & 20  \\
+ \hline
+ 300 & 7624 & 14 \\
+ \hline
+ 400 & 4269 & 10 \\
+ \hline
+\end{tabular}
+\label{waste10thai}
+\caption{Waste management for 10\% of waste (1.435 Mt/year or 4 t/day)}
+\end{table}
+
+\begin{table}
+\centering
+ \begin{tabular}{||c c c||} 
+ \hline
+ \makecell{Capacity of buy-back (kg/day)} & \makecell{Area to be covered by facility (km2)} &  Total facilities \\ [0.5ex] 
+ \hline\hline
+ 100 & 534 & 80   \\ 
+ \hline
+ 200 & 1067 & 40  \\
+ \hline
+ 300 & 3812 & 28 \\
+ \hline
+ 400 & 2135 & 20 \\
+ \hline
+\end{tabular}
+\label{waste20thai}
+\caption{Waste management for 20\% of waste (2.87 Mt/year or 8 t/day)}
+\end{table}
+
+
+
+EJEMPLO DE BANGKOOK
+The city of Bangkok, produces then 9 606 kg of waste per day (8.281 million inhabitants and 1.16 kg/capita of waste per day). After the consideration of 20\%, removing the organic waste, the buy-back facilities would have to deal with 961 kg of waste per day. 
+
+densidad por km2 de poblacion y necesidad de pet bottle por km2  para los buybacks. tener en cuenta la posible capacidad para ver cada cuantos km se podria poner una tienda. relacionar esto con la densidad de poblacion. no tener en cuenta la totalidad de residuos, si no un poorcentaje porque ocn el curbside recycling se deberia poder hacer.
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth,height=.3\textheight]{collectinsystem.PNG}
+    \caption{Collecting system example}
+     \label{collectingsystem} 
+\end{figure}
+
+\subsubsection{Curbside recycling}
+
+The curbside recycling is already implemented in Thailand and it's a complex structure, as it involves many types of collection mechanism. Not wanting to modify the collectors, the solution suggested is simple, it is already implemented in many countries: different bins. As mentioned previously organic waste generated amounted to 50\% and contaminated waste is a great drawback as it increases the costs of recycling. That is why, organic has to have its own container. Additionally, plastic and paper result in being a great portion of the waste, therefore a bin should be created for each: paper/paperboard and plastic. The collection process shall remain the same, but the frequency has to vary from bin to bin: organic container should be collected twice as many times as the rest.
+
+It is important to add that, the objective of the application and the implementation of the program is not to change the whole system already in use. As it is known that Thai citizens already have a structured market of recycling. The purpose of the propositions are merely complement, ease and add information and not replacing or create unfair competition. This study does not encourage the government to create new government managed buy-back stores as it would discourage the already functioning structure of centres. On the other side, Thailand's government is encouraged to give support to already constructed facilities in order to increase their capacity. Moreover strengthening the system could be made with economic or land incentives: reduce tax rates or offering better land opportunities for the recycling industry. 
+
+\subsection{Dealing with the demand}
+Recycling virgin PET (v-PET) bottles can be turned mainly into other recycled PET (r-PET) bottles or PET fiber. 
+
+
+ \subsection{Carbon tax}
+In 2019, Thailand hasn't yet signed for an implementation of the carbon tax, but it is under construction \cite{wbgcarbon2019}. Additionally, the median price of the carbon tax is approximately 10\$/tCO2 \cite{wbgcarbon2019}. However, Canada having a GDP three time as much as Thailand's \cite{worldbankgdp} started with a CO2 tax of 10 \$/tCO2. Then, for the sake of the argument it seems reasonable to consider that Thailand's carbon tax could be 3\$/tCO2. Thailand emitted a total amount of 271 Mton (million tonnes) of CO2 \cite{EDGARco22017} in 2016, therefore the impact of the CO2 tax would be considerable: 813 million dollars.
+
+The growth of Thailand's CO2 emission has been growing at a rate of 2.82\% per year (from 2000 to 2016) \cite{wbgcarbon2019}. With the equation \ref{compoundinterest} with Ao=271, n=10 years and g=2.82\%, the emission of Co2 by 2026 would turn into 358  Mton. Moreover, in order to calculate the economic impact of the carbon tax, a growth could be expected at 5\% per year adding up to the inflation rate. The inflation rate (from 2000 to 2016) results in 2.23\% annually \cite{worldbankgdp}. With the equation \ref{compoundinterest}, with $g=2.23+5=7.23$ ,n=10 and Ao=3, the carbon tax would result in 6.03 \$/tCO2 by the tenth year (2026). The economical impact would result in 2159 million dollars. See table \ref{co2comparison} for the comparison. 
+
+Note: it should be taken into account that CO2 tax rate has never applied to the total amount of CO2 emitted \cite{wbgcarbon2019}. However with a low price tax, the taxation can be extended to a wider percentage of the total CO2 emissions.
+\begin{equation}
+    Af=Ao(1+g)^n 
+    \label{compoundinterest}
+\end{equation}
+
+\begin{table}
+\centering
+ \begin{tabular}{||c c c c||} 
+ \hline
+ Year & Carbon tax (\$/tCO2 ) & CO2 emitted(Mton of CO2) & Amount (M\$) \\ [0.5ex] 
+ \hline\hline
+ 2016 & 3 & 271 & 813 \\ 
+ \hline
+ 2026 & 6.03 & 358 & 2159 \\
+ \hline
+\end{tabular}
+\label{co2comparison}
+\caption{Comparison table of the economical impact of the CO2 tax}
+\end{table}
+
+\subsection{Oil}
+In 2018, Thailand imported  26 901 M\$ in crude oil (ranked first as product imported to Thailand), 5 057.7M\$ in natural gas and 486.7 M\$ in refined oil (see table).% and exported 9 710 million euros in polymers of ethylene and propylene in primary forms.%These previous products ranked fifth and first in exports and imports respectively (\cite{Tradereport2018}. This program can reduce the dependence on oil and strengthen the exports of ethylene products.  
+The country's petrochemical industry, uses those three products to the generate PET/Polyester, with a capacity of 1923 ktons/year\cite{PTITpetrochem2018}. In 2017, its production totaled 32 Mtonnes, of which 1.728 Mtonnes was used for textile and 3.648 Mtonnes for the packaging industry \cite{KrungsriPetrochem2018}.
+In order to make the forecast of the year 2026, the suppositions made is that prices of oil products will continues to grow on a linear pace and : see table for annual growth. 
+
+Note: the prices of oil is a multiple variable problem, therefore the simplification made cannot guarantee the accuracy of this prediction.
+In order to calculate the future value of the imports, the growth rate is a sum of Thailand's import growth rate and the product's price rate. With the formula \ref{compoundinterest} the amount is calculated and shown in table \ref{growthrateoilprod}.
+CONSUMO DE OIL HASTA 2026 CON EL PRECIO DEL PETROLE E IMPACTO ECONOMICO
+ HACER UNA GRAFICAAAAAAAAAAAA
+ 
+ 
+\begin{table}
+\centering
+ \begin{tabular}{||c c c c||} 
+ \hline
+ Product & Price growth (\%) & Thailand's growth & 2026 Cost (M\$) \\  [0.5ex] 
+ \hline\hline
+ Natural gas & 0 & 7.06 \cite{Tradereport2018} & 8 728  \\ 
+ \hline
+ Crude oil & 1.11 & 5.38 \cite{Tradereport2018} & 44 488  \\
+ \hline
+\end{tabular}
+\label{growthrateoilprod}
+\caption{Growth rates for oil products}
+\end{table}
+
+\subsection{Recycling}
+Why recycling? A study case of Italy, considered multiple scenarios (see table \ref{Scenperugini}) for PET and PE recycling. The results where conclusive, the energy consumption for recycling scenarios was at least 86\% less than non- recycling scenarios \cite{Perugini2004}. Moreover, GHG emissions for amorphous PET (APET) to  fibre where 0.7 tCo2 eq, whereas from APET to bottle 1.4 tCO2 eq \cite{Shen2011}. 
+
+Broadly there are two forms of recycling considering PET: chemical and mechanical recycling. Which would be best suited? It depends, it's a multiple variable problem.
+
+Due to the lack of data, it is important to note that some articles and life cycle assessment (LCA) reports have been chosen with the goal of taking a decision.
+
+At first it should be considered the objective of recycling: it can be reducing GHG (green house gas) emissions, tackle the demand in other areas with recycling or even creating a powerful industry.
+
+\subsubsection{Mechanical}
+
+Mechanical recycling consist on turning a bottle of PET to another bottle (B2B) or to PET fiber (B2F). This method of recycling can deal with an infinite amount of cycles of B2B. This means that B2B recycling can consistently be done and therefore there would no need for incineration or landfilling, as materials can be reused. In order to manufacture a mechanical recycled bottle, at least 65\% \cite{Nakatani2010} of the content has to be v-PET. Therefore, there will be a maximum amount of 35\% of r-PET, and a consistent need for v-PET (this is due to the discoloration effect in mechanical recycling). However, this is not the case for B2F. In fact mechanically recycling fiber is much more difficult by reason of other fibres blending with PET fibres. The result being PET fibres have to be incinerated or landfilled as they cannot be recycled with mechanical methods. See image \ref{illusmeharecycing} for illustration. The problem then is to decide what to recycle.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth,height=.3\textheight]{mechanicalpetillustration.PNG}
+    \caption{Illustration of mechanical recycling}
+     \label{illusmeharecycing} 
+\end{figure}
+poner aqui primero lo de la demanda de fiber and rpet bottle 
+
+BUSCAR DEMANDA DE PET FBER Y DEMANDA DE PET BOTTLE
+
+The dilemma is how to distribute the recycling power, how much capacity to B2B and B2F. As seen previously, Thailand's petrochemical industry  dedicated 32\% of its capacity for textile industry and 68\% to packaging. On the other side, the bottling industry accounted for a 83-84\% of the PET resin demand in 2012 \cite{Wen2014}. It would then seem reasonable to concentrate on B2B recycling. It is not that simple.
+
+A report made from mechanical recycling system with incineration and energy recovery, stated that there was a linear relationship between the replacement of v-PET by r-PET: every tonne of PET recycled, regardless of the scenario, resulted in 43.5 GJ and a GHG emission saving of 2.4 tCO2 eq \cite{Shen2011}. Moreover, the ecoprofile created by PlasticsEurope for the PET grade bottle (before inecttion moulding) stated a 2.19 tCO2 eq for every tonne of PET. The production of the PET amounted to a 13.2\% for GHG emissions \cite{PEPETecoprofile}. Therefore, the GHG emissions of APET would be 1.9 tCO2 eq (see table \ref{GHGprod} for summary).  Moreover, B2F mechanically recycled range from 0.96 to 2.03 tCo2 eq, depending on the approach \cite{Shen2010}. In this study, the "system expansion" has been chosen as approach because it takes into account the life cycles of the system. With this approach, the GHG emissions turn out to be 1.33 tCO2 eq.   
+
+For the sake of the argument, it will be consider v-PET fibre as valuable a r-PET. That not being the real case, it will be analyzed later.
+HABLAR DEL SUPERCLEAN PROCESS
+
+As 1Kg of bottles is obtained from 1.01 kg of r-PET \cite{Shen2010}, it has been estimated that 
+
+HABLAR DE LA ENERGIA QUE CONSUME 
+
+HACER COMPARACION FINAL ENTRE VPET BOTTLE Y EL ESTUDIO
+This study will investigate how to deal with the demand and GHG emissions taking into account that our study case will be 80\% bottle producing and 20\% fibre producing, totalling 1 tonne. (CHECK IMAGE PONERLA). As said previously, the maximum amount of r-PET in a bottle has to be of 35\%  in the first recycling cycle it will considered that v-PET is necessary for the recycled bottles to be produced; this will be stated as a first cycle. If a total production of 800kg of bottles and 200kg of fibres is desired, resolving equations results with a recycling rate "r" for bottles of 44\%.
+
+\begin{table}
+\centering
+ \begin{tabular}{|c c||} 
+ \hline
+ Product & GHG emissions (tCO2eq) (M\$) \\  [0.5ex] 
+ \hline\hline
+ APET & 1.9 \cite{PEPETecoprofile} \\ 
+ \hline
+ Fibers from APET oil & 0.7 \cite{Shen2011}\\
+ \hline
+ Bottles from APET & 1.4 \cite{Shen2011}\\
+ \hline
+ B2F & 1.33 \cite{Shen2010}\\
+ \hline
+ bio-based PET & 1.2 \cite{Shen2011}\\
+ \hline
+\end{tabular}
+\label{GHGprod}
+\caption{GHG for different products}
+\end{table}
+
+
+\begin{table}
+\centering
+ \begin{tabular}{||c l||} 
+ \hline
+ Scenario & \makecell{ Description}  \\  [0.5ex] 
+ \hline\hline
+ I & \makecell{ No recycling and landfill disposal of all the collected plastic\\ waste} \\ 
+ \hline
+ II & \makecell{No recycling and landfill disposal of 50 \% of the collected\\plastic wastes, the remaining being incinerated with energy recovery} \\ 
+ \hline
+ III & \makecell{No recycling and all the collected plastic wastes sent to\\ incineration with energy recovery} \\ 
+ \hline
+ IV & \makecell{Mechanical recycling of all the collected plastic wastes\\ and landfill disposal of all the process wastes}\\ 
+ \hline
+ V & \makecell{Mechanical recycling of all the collected plastic wastes\\ and landfill disposal of 50\% the process wastes, the remaining\\ part being incinerated with energy recovery} \\ 
+ \hline
+ VI & \makecell{Mechanical recycling of all the collected plastic wastes\\ and the process wastes sent to incineration with energy recovery} \\ 
+ \hline
+\end{tabular}
+\label{Scenperugini}
+\caption{Scenarios from Italian LCA study \cite{Perugini2004}}
+\end{table}
+
+
+
+
+\subsubsection{Chemical}
+The idea behind chemical recycling is returning PET bottles to an earlier stage in the production process than mechanical recycling thanks to depolymerization of the material (back to monomers or oligomers); see image \ref{Recyclingstruct} to appreciate the differences . What is most important about this technique is the quality achieved. Indeed, the quality of v-PET is attainable with this technique \cite{Shen2010}. There are a few methods of chemical recycling: glycolisis, methanolysis and hydrolisis. As the objective of the study is to state the impact of recycling, the different methods won't be detailed and the larger picture will be displayed.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth,height=.33\textheight]{recyclingmechanism.PNG}
+    \caption{Recycling structure \cite{Peruginimechanical2005}}
+     \label{Recyclingstruct} 
+\end{figure}
+
+
+Chemical recycling has a worst efficiency than mechanical recyclcing: for every 1.05 kg of PET flakes the output is 1 kg of r-PET of fibre recycled. When it comes to GHG emissions, r-PET to fibre has a GHG emission of 2.82 kgCO2 eq for every 1kg of fibre compared to 5.54 kgCO2 eq for v-PET fibre. Moreover the non renewable energy requirement (NREU) necessary to chemical recycling is 64\% less than v-PET fibre (48 GJ and 79 GJ for every tonne of r-PET fibre)\cite{Shen2010}. The comparisons are shown in table \ref{recyclingcompchemicshen2010}.
+
+\begin{table}
+\centering
+ \begin{tabular}{||c c c c||} 
+ \hline
+ Recycling & Mechanical & Chemical & v-PET  \\  [0.5ex] 
+ \hline\hline
+    GHG emissions (tCO2 eq) & 1.33 & 2.82 & 5.54 \\
+ \hline
+ NREU (GJ) & 23 & 48 & 79 \\
+ \hline
+ 
+\end{tabular}
+\label{recyclingcompchemicshen2010}
+\caption{Comparison between systems for 1 tonne of PET B2F \cite{Shen2010}}
+\end{table}
+
+
+
+\subsection{Final approach}
+
+There are some other factors to take into account when it comes to recycling. The studies mentioned previously (\cite{Shen2010}, \cite{Perugini2004}, \cite{Shen2011}) concluded that transport had a minor overall impact compared to the rest of the process. What was most energy consuming was the reprocessing of the PET. Therefore if the implementation occurs, it's crucial to focus on the optimization of the reprocessing of PET.
+
+On a second stage, landfilling was better placed than incineration when dealing with GHG but not when it came to energy energy consumption \cite{Nakatani2010} (incinerators where supposed as having energy recovery systems).
+
+Finally, fibres that are made out of r-PET have not the same properties as the v-PET fibres. Therefore it should be taken into account that even if the fibres are r-PET recycled, the demand might not be met, hence other fibres made out of v-PET will be needed at the end.
+
+Moreover, Thailand has been trying to deal with the problem of waste disposal by creating facilities of waste to energy (WTE). At present, the WTE accounts for 377 MW of capacity (3.8\% of electricity generation) \cite{ERC_annreport2018}. 
+Additionally, a bad management of municipal wastes, leads to illegal dumping and burning: in 2018, 26\% of total waste was incorrectly disposed (out of 84\% collected) \cite{PCDpolstate2019}. Therefore considering plastic as a source and not as waste can improve the present conditions:
+
+\begin{enumerate}
+    \item Reducing waste (recycling plastic and paper)
+    \item Improvement of composting as a side effect of the separation in the curbside recycling
+    \item Reduce GHG emissions
+    \item Reduce the dependency of landfills by extracting possible plastics to be turned back into the production.
+    
+\end{enumerate}
+
+It seems clear that recycling is interesting whether the goals are reducing GHG emissions or saving money.
+
+
+AQUI COMPARAR CON LA SITUACION DE TAILANDIA SOBRE LOS INCINERADORES Y QUE TIENEN
+hablar de las capcidades del landfilling  si estan sobrepasados
+
+
+\subsubsection{Recycling decision}
+
+It is a very complicated situation due to the quantity of studies and the variables dealt with in each. Is there a clear solution to go for? Apparently no. However, as described formerly, b-PET emitted 1.2 kgCO2 for every kg produced; this sample occurred when MEG was bio-based but PTA was petrochemical \cite{Shen2011}. Additionally, another research held so as to achieve a discernment between different cases in PET bottle production, express that corn based MEG and petrochemical PTA (30\% bio-based final bottle) was in a great position concerning GHG emissions, although fossil fuel PET bottle had better results if carbon sequestration by the plants (carbon sequestration is the storage of carbon.) wasn't taken into account: approximately 4.2 kgCO2 eq \cite{Hunter2016}.
+
+A study that emulated recycling with a mathematical approach, had different conclusion depending on the scenario. Three situations where  investigated differentiated by numbers of recycling cycles: one, three and infinite cycles. If the single situation cycle was set, the most favorable form of  recycling was chemical (with glycolisis). As the number of cycles grows (in 3 cycles the change was already noticeable), it seems more interesting in an environmental perspective to go for B2B with mechanical recycling. In addition, it is noteworthy that the recycling structure was more optimal with collection rates passing 80\% rate \cite{Komly2012}. Therefore from an environmental point of view it seems more interesting to go into mechanical recycling. In addition, mechanical recycling needs less investment than chemical recycling. This is the reason why, this study will focus then on the GHG emissions saved by doing mechanical recycling and the money conserved from reducing fossil fuels consumption. B2B seems then as the best option for recycling.
+
+
+In order to evaluate the GHG impact of mechanical recycling, the approach taken is how much r-PET replaces v-PET (recycling rate 'r'). Moreover, mechanical recycling cuts expenses: 1 kg of r-PET contributes to saving as much as 1.54 to 1.37 kg of oil, 0.625 kg to 0.43 kg of gas and 0.46 to 0.39 kg of coal \cite{Perugini2004}. These factors will be taken into account to calculate the possible impact.
+
+For a better perspective on recycling, a comparison has to be made with the actual situation. As mentioned before, oil and gas are expected to grow at 6.49 \% and 7.06 \%  respectively (see tabe \ref{growthrateoilprod}). Moreover, the growth of Polyester/PET capacity from 2015 to 2018 was 4.5\% \cite{PTITpetrochem2018}. To calculate the oil price, 2018's price has been taken as a reference (65.23\$/barrel) with a growth (as stated previously) of 1.1\% to calculate future prices. Furthermore, there is a linear relationship between CO2 savings and r-PET: 2.4 tCO2 eq for replacing v-PET by r-PET \cite{Shen2011}, no matter what the scenario. Although it is not exactly how it works, it will be consider that each tonne of PET/Polyester produced will be used to manufacture PET bottles. The results are shown in image \ref{graph_ghgemissionssaved} \ref{graph_moneysavedghg} \ref{grpah_moneysavedoil} \ref{grpah_totalmoneyspent}.
+
+\begin{figure} % hechoo
+    \centering
+    \includegraphics[width=0.6\textwidth,height=.33\textheight]{graph_ghgemissionsaved.PNG}
+    \caption{GHG emissions from PET production according to the recycling rate (in \% recycling rate)}
+     \label{graph_ghgemissionssaved} 
+\end{figure}
+
+\begin{figure} % esto esta bien
+    \centering
+    \includegraphics[width=0.6\textwidth,height=.33\textheight]{graph_moneysavedfromoil.PNG}
+    \caption{Money saved from oil depending on the recycling rate (\%)}
+     \label{grpah_moneysavedoil} 
+\end{figure}
+
+\begin{figure} %  hecho
+    \centering
+    \includegraphics[width=0.6\textwidth,height=.33\textheight]{graph_moneysavedcarbontax.PNG}
+    \caption{Money saved on carbon tax depending on recycling rate (\%)}
+     \label{graph_moneysavedghg} 
+\end{figure}
+
+\begin{figure} 
+    \centering
+    \includegraphics[width=0.6\textwidth,height=.33\textheight]{graph_totalmoneyspent.PNG}
+    \caption{Total money spent (on oil and carbon tax) depending on the recycling rate}
+     \label{grpah_totalmoneyspent} 
+\end{figure}
+
+As the previous graph show, recycling makes a difference (the recycling rates go from 20\% to 90\%,). Even though it consist on a  simple analysis, conclusions can be extracted. First, the amounts of CO2 no emitted are important: ranging from 1.3 Mt to 5.9 Mt of CO2 eq by 2026, depending on the recycling rate\ref{graph_ghgemissionssaved}. It is noteworthy that the amount saved from the withholding of CO2 emissions is very modest (7.9 to 35.5 M\$ by 2026) compared to the quantities saved from decreasing oil consumption (528 to 2377 M\$), but still these amounts are relevant. As expected, the amount saved from needing less oil are greater than the CO2 carbon tax. To state the relevance, by 2026, a recycling rate of 50\% would result in 2000 M\$ savings. Finally, it is important to state that mechanical r-PET cannot subsitute entirely v-PET, therefore there would still be a great demand for the manufacturing PET fibres. Moreover, as stated previously, mechanically recycled PET bottles can have a maximum amount of r-PET of 35\%, resulting in additionally need v-PET for the 65\% left.
+
+
+\section{Manufacturing}
+Production cost and recycling structures can be improved up to a limit. On the side of product choice a great improvement can take place. In fact, 85.5\% of CO2 emissions of a bottle grade PET was derived from material production: p-xylene, mono ethylene glycol (MEG) and purified terephthalic acid (PTA) amounted to 36 \%, 25.1\% and 24.4 \% of total emissions respectively \cite{PEPETecoprofile}. Concerning GHG emissions, bio-based PET (b-PET) had a 40\% less impact (1.2 tCO2 eq) than petrochemical PET \cite{Shen2011}.
+
+\subsubsection{PTA}
+There are three main ways of developping PTA: muconic acid, isobutanol and benzene. It's produced by the oxidation of xylene, which is a product from generated from naphtha. However, there are different possibilities, originated from other feedstocks. In fact, a research studied wheat stove, sugar (from corn) and poplar wood as feasible resources to manufacture PTA. Poplar wood resulted to be more eco-friendly in terms of GHG emissions: 4.1, 6.9 and 7 kgCO2 for poplar wood, sugar (corn) and wheat respectively. What strikes is that petrochemical PET  resulted in less GHG emissions than the rest with 3 kgCO2 \cite{Akanuma2014}. The interesting aspect about this study, is that it was a combination of bio MEG and petrochemical PTA that gave the best results in  GHG emissions: 2.7 kgCO2 eq, although these results are not conclusive as there is a lack of information towards LCA of bio MEG.
+
+Previously mentioned studies stated smaller emissions for PET than 3 kgCO2 (1.9 kgCO2 \cite{PEPETecoprofile}) and the variability of the final results depends on the analysis and the tools. As more studies have to be made in order to be able to have a more precise picture of CO2 emissions, the conclusion that can be extracted is that there's a need for further investigations. 
+
+
+\subsubsection{PLA}
+
+On the other side, there exist a quest for replacing PET and other plastics with more environmental friendly solutions: normally bio-based plastics. One of them turns to be polylactide (PLA). PLA is extracted from corn and hence seems like a great solution. The final look on GHG emissions by replacing it for PET, looks positive: from cradle to gate (bottle production) an estimated 1.09-202 kgCO2 eq was emitted \cite{mlade2016corn} on opposition to 3.3 kg of CO2 eq derived from PET (see table \ref{GHGprod}). On the other side,  due to PLA's properties, it's not suitable for carbonated drinks, therefore only having the possibility of replacing part of the market.
+
+Indeed, at first, it can be assumed as a feasible options. However, PLA is the result of genetically modified organism (GMO) and can lead to soil overexploitation. Additionally, the increasing need for packaging, will multiply the need for corn and consequently to deforestation. To add up, even though it is corn-based that doesn't imply environmental friendly. In fact, an experimented carried with PLA in artificial seawater and freshwater showed no degradation after a year (remaining more than 99\% of the initial mass) \cite{Bagheri2017}. Despite all what was previously mentioned, PLA has still a great margin of development contrary to PET.
+
+The decision to be taken has to deal with new issues, human health. Indeed, PLA seemed as environmental feasible solution: saving the use of fossil fuels was important. However, as there's a necessity to be solved (fossil fuels by corn), the result is again overexploitation of soil and causing majors damages, adding up to the use of pesticides and fertilizers. These factors deteriorate the ecosystem and hence harmful to humans \cite{Gironi2011}. Additionally, a consequence of manufacturing PLA, would be dealing with both PLA and PET, hindering recycling. It is on this basis that PLA, shouldn't be adopted as an alternative to PET until further research has been done.
+
+\subsubsection{Manufacturing decision}
+
+As stated formerly, there are multiple options when it comes to manufacture a product, every different situations leads to new challenges. On one side Bio-based plastic seem to take the lead under environmental decision taking. On the other side, surprisingly, sometimes consuming fossil fuels seems like a better solutions when it comes to human health issues; at least for the moment. However, this statements are not clearly defined, as further research needs to be made. Furthermore, bio-based plastics still have way to go when it comes to improving, which is positive because it may seem like a near future solutions to the plastics problem.
+
+Between the options described formerly, what seems like the most feasible options would be a combination between fossil fuels and bio-based feedstocks. The studies mentioned then suggests that the best suitable combination would result in  bio-based MEG nd petrochemical PTA with a resulting GHG emission of 1.2 kgCO2 eq and 30\% of the materials of the bottle would be bio-based (the MEG is responsible for the 30\% of material contribution). 
+
+Considering then 1.2 kgCO2 for every kilogram of b-PET produced, there would be a saving of 37 \% from the original APET (1.9 kgCO2 eq); as the manufacturing of the bottle is considered of having the same impact for v-PET than b-PET due to the fact that the process is the same. Analysing then the consequences of b-PET independently of the recycling structure would result int (check image for ..)
+
+Thailand in 2018, had a capacity production of 425 ktons of MEG, which was solely used for the production of PET \cite{PTITpetrochem2018}.As the production of MEG accounted for 23\% of fossil fuels and 25\% of global warming potential (kgCO2 eq ) \cite{PEPETecoprofile}, this therefore accounts for 0.35kg of oil (23\% of 1.54 kg of oil \cite{Perugini2004}). In order to make an observation on the possible impact of b-PET, it will be progressively analyzed, the amount of MEG will be varied from 0\% to 100\%; 0 being the prodution of MG is fully petrochemical and 100 being fully bio-based. The results are detailed below.
+
+
+\begin{figure} % hechoo
+    \centering
+    \includegraphics[width=0.6\textwidth,height=.33\textheight]{Co2emitted_bPET.PNG}
+    \caption{GHG emissions from v-PET to b-PET production}
+     \label{graph_bpetghgemissionssavedb} 
+\end{figure}
+
+\begin{figure} % done
+    \centering
+    \includegraphics[width=0.6\textwidth,height=.33\textheight]{grpah_bpetmoneysavedfromoil.PNG}
+    \caption{Money saved from oil depending on the amount of bio-based MEG (\%)}
+     \label{graph_bpetssavingsoil} 
+\end{figure}
+
+\begin{figure} %  hecho
+    \centering
+    \includegraphics[width=0.6\textwidth,height=.33\textheight]{carbontax_biopet.PNG}
+    \caption{Money saved on carbon tax in M\$ form v-PET to b-PET (\%)}
+     \label{graph_bpetmoneysavedghg} 
+\end{figure}
+
+%\begin{figure}[H] % NO HECHO
+%    \centering
+ %   \includegraphics[width=0.6\textwidth,height=.33\textheight]{graph_totalmoneyspent.PNG}
+  %  \caption{Total money spent (on oil and carbon tax) depending on the recycling rate}
+  %   \label{grpah_totalmoneyspent} 
+%\end{figure}
+
+As seen in figure \ref{graph_bpetghgemissionssavedb}, the comparison between using b-PET or v-PET can result in 2 MtCO2 eq difference by 2026, in favor of b-PET. That leads to saving 10 M\$ on an hypothetical carbon tax, see \ref{graph_bpetmoneysavedghg}. Finally, it is complicated to replace b-PET from v-PET, therefore it seems like it would be done progressively. The influence of b-PET is enormous, in fact by 2026, having 20\% of b-PET can save up to 160 M\$. Finally, this sum grows more rapidly as the percentage increase, with a sum of 600 M\$ saved by 2026 on oil consumption if v-PET is replaced by b-PET (see figure \ref{graph_bpetssavingsoil}). 
+
+Furthermore, b-PET can be complemented with mmechanical recycling. So as to achieve that if b-PET and mechanical recycling is combined, a division between use of oil is needed. In 2018 MEG accounted for 423 ktons and PET/Polyester for 1923 ktons \cite{PTITpetrochem2018}. It has been considered then that 22\% ($423/1923 $)accounted for MEG and the rest was PTA.
+
+As the results display, the combination of mechanical recycling and b-PET is a great solution: achieving negative CO2 turned to be possible; see figure\ref{graph_bpetmechryghgemissionssavedb}, hence the money spent on carbon tax turned to be negative with 60\% and upwards\ref{graph_bpetmmechrecmoneyco2}. Moreover the amount of money possibly saved settles behind mechanically recycled PET, this is due to the fact that the process of oil consuming has been separated between MEG and PTA and therefore the quantities are smaller, although the money saved is great: 2150 M\$ from oil \ref{graph_bpetmechryssavingsoil}.
+
+Finally, as it has been shown, the best possible solution seems a combination between petrochemical and bio-based plastics, with mechanical recycling established.
+
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth,height=.33\textheight]{mechrecy_bpet_ghgemissions.PNG}
+    \caption{GHG emissions depending on recycling rate (\%) with b-PET)}
+     \label{graph_bpetmechryghgemissionssavedb} 
+\end{figure}
+
+\begin{figure} % done
+    \centering
+    \includegraphics[width=0.6\textwidth,height=.33\textheight]{mechrecy_bpet_totalmonay.PNG}
+    \caption{Money saved from oil based on recycling rate (\%) and b-PET}
+     \label{graph_bpetmechryssavingsoil} 
+\end{figure}
+
+\begin{figure} %  hecho
+    \centering
+    \includegraphics[width=0.6\textwidth,height=.33\textheight]{mechrecy_bpet_ghgdolllaros.PNG}
+    \caption{Money spent on carbon tax in M\$ based on recycling rate (\%) and b-PET}
+     \label{graph_bpetmmechrecmoneyco2} 
+\end{figure}
+\section{Water}
+The main problem in plastic water solution, as mentioned previously, is the amount of plastic objects in rivers, finally disemboguing in the sea.
+The output is the pollution of the oceans, but one main source are coming from the rivers. Gathering the plastics out of the rivers  contributes to reduce the pollution but posterior treatment is necessary.
+
+\subsection{Gathering system}
+Waste carried along the river is not only present in the surface but also in the depths of the water. Additionally the system needed to collect the plastic and other types of litter, has to be compatible with maritime traffic and wildlife. That is why the system chosen is air bubbles.
+The air bubble systems (see image \ref{airbubblemech1}) consists on a pipe placed at the bottom of the river/canal, pierced so there is an outflow of air coming from the pipe. The pipe will be placed diagonally in order to utilize the current in an effective manner (see image \ref{airbubblemech2}). Surface current provoqued by the bubble barrier, is not affected directly by the pressure. In fact maximum surface current generated is proportional to the cube root of airflow rate per
+unit width\cite{Lo1991}.
+
+The reasons behind the selected system are the ease of installation and the adaptation to different circumstances. In fact, this method is not influenced by the presence of waves \cite{airbubble}, although greater waves might influence in final results. To add up, the systems is already been used in the Netherlands as an additional solution to gather plastic present in canals (see image \ref{airbubblepic}).
+
+
+At the end of the air bubble line, there should be a container responsible for the storage of that waste until the collect. As the system is installed, a statistical study of the waste collected would be interesting  in order to get to know the sources of the scrap.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.34\textheight]{BB-Amsterdam.jpg}
+    \caption{Air bubble example \cite{thegreatbubble}}
+     \label{airbubblepic} 
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.34\textheight]{bubblemecahinism.png}
+    \caption{Air bubble mechanism 1}
+     \label{airbubblemech1} 
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth,height=.4\textheight]{bubbemecha2.png}
+    \caption{Air bubble mechanism 2}
+     \label{airbubblemech2} 
+\end{figure}
+
+\subsection{Social awareness}
+Everything done previously wouldn't be completed without enacting the recycling mindset. In order to do that, this study recommends acting through various canals:
+
+\begin{enumerate}
+    \item Policies favoring the recycling system
+    \item Promulgating the policies and objectives
+    \item Campaigns to adults (facilitating information)
+    \item Campaigns to younger citizens
+\end{enumerate}
+
+It is true that all what was formerly stated ends being inefficient without the back up of the government. Recycling is useless if the government doesn't permit it. The B2B system can't be initiated as it is prohibited to  create PET bottles with r-PET. Moreover, once the correct policies are being written, it is crucial to publicize them. It won't have any relevance if people are not informed: there is no movement forward by companies than could invest in the country.
+
+Additionally, as it has been stated previously, it is decisive how people see recycling, as it can be seen a burden. Instead, informing about the advantages that are lost as a result of not recycling should be done. It is recommended to distribute waste separation bins home by home, because as seen in the previous study, people eventually won't have means to separate their waste \cite{Wen2014}. Finally, it is with the generations that future is changed, that is why, there should be campaigns on raisin awareness in schools in order to be easier to create changes in plastic consumption.
+\end {document}
