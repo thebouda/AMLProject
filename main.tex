@@ -48,7 +48,7 @@ As a part of the Advanced Machine Learning course at Politecnico di Torino, this
 The work will cover the federated scenario using the standard FedAvg aglorithm with multiple sets of parameters and evaluate the one with the greatest performance. Experiments with different settings such as data distribution, normalization layers and group normalization will be implemented. Finally, there will be a solution proposal (which will be a test) in order to solve one of the identified problems.
 
 \section{Related Work} %mandatory
-This experiment has already been performed by \cite{DBLP:journals/corr/abs-2003-08082}  on the iNaturalist-2017 [4] \emph{https://paperswithcode.com/dataset/inaturalist} dataset.. They provided an analyze of the effect of learning with per-used data and proposed two new algorithms (FedVC, FedIR) and provided new large-scale datasets with per-user data.
+This experiment has already been performed by \cite{DBLP:journals/corr/abs-2003-08082}  on the iNaturalist-2017 [4] \emph{https://paperswithcode.com/dataset/inaturalist} dataset. They provided an analyze of the effect of learning with per-used data and proposed two new algorithms (FedVC, FedIR) and provided new large-scale datasets with per-user data.
 
 A different algorithm (FedAvgM) has been proposed by \cite{DBLP:journals/corr/abs-1909-06335} using momentum on top of SGD to accelerate the network training. This approach changes the way the weights are updated to add momentum at the server.
 
@@ -63,7 +63,9 @@ Federated Learning consists of a client and a server side. Considering the CIFAR
 Moreover, in order to simulate real world data, a Delta variable was implemented into the code in order to add randomness regarding the distribution of the data among clients. The variable added some casualty to the quantity of data that each client would be seeing. For example, if Delta = 100, each of the 100 clients would have a minimum of 400 images and a maximum of 600. (50 000 / 100 = 500 +- 100).
 
 
-To add up, the distribution of data was considered to be performed randomly. The variability Delta introduced was not great, and this was done intentionally. The problem of some client having way bigger amount of images (2-3 times) than others could have been solved with the creation of additional virtual clients and splitting the data among them. In terms of implementation this would be equal to increasing the number of clients from K to K + i, where i is the number of the virtual clients created (CHECK IF IT MAKES SENSE) 
+To add up, the distribution of data was considered to be performed randomly. The variability Delta introduced was not great, and this was done intentionally. The problem of some client having way bigger amount of images (2-3 times) than others could have been solved with the creation of additional virtual clients and splitting the data among them. In terms of implementation this would be equal to increasing the number of clients from K to K + i, where i is the number of the virtual clients created (CHECK IF IT MAKES SENSE). 
+
+Moreover in order to test the model, the accuracy on the training was computed as an average of the accuracy on the client's data. On the validation part, the accuracy was tested witht the whole validation dataset on the server side.
 
 Finally the number of selected clients C, was chosen based on performance (INSERT TABLE OR GRAPHIC). In fact, with a C <0.3 the performance decreased significantly (put some values).
 INSERT GRAPHICS BETWEEN DIFFERENT C AND THE CONSOLIDATED MODEL
@@ -211,10 +213,23 @@ However, even on this occasion, the two algorithms achieve similar results. In t
 (10A, 10B)
 
 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.3\textheight]{FedAvgMvsFedAvg.png}
+    \caption{Accuracy comparison between FedAvg and FedAvgMomentum}
+    \label{FedAvgvsFedM} 
+\end{figure}
+
 
 \subsection{Conclusion}
-SUM UP RESULTS AND 
-\subsection{References}
+The general idea that can be done form this paper work is that, although it doesn't have the accuracy of the centralised model, Federated Learning works and can be used on real life scenarios.
 
+Moreover, as it has been shown with, the FedAvg does just fine if not fine tuned, and certainly normalization helps to improve the accuracy. As a general tendency, the normalization improves the  accuracy, whether it is group or batch normalization (even though group normalization better performances). 
+
+Additionally, the introduction of non IID and different quantity of data to the clients increased the difficulty of data treatment and learning. However, if the parameters didn't led to extreme cases, the accuracy was still acceptable.
+
+Finally, in order to deal with the non IID, the FedAvgMomentum, at first was thought as a feasible solution to improve the accuracy, however, the algorithm ended up not having the positive impact expected with the resources that were available.
+
+\printbibliography
 
 \end{document}
