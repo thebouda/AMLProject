@@ -159,20 +159,50 @@ Sticking with figure \ref{AccDiff}, over 8 tests done, there's no clear differen
 In order to achieve a better understanding of the possible accuracy outcomes when deploying the model, different data distribution between clients should be taken into account. \textbf{\emph{NOTE : Not sure to understand the previous sentence.}} In order to simulate client getting different data distribution, the Dirichlet distribution was used. The parameter Alpha, represents how different the distribution is between clients: with a greater Alpha, the distributions 
 would be similar, with smaller Alpha, the distribution between clients differs.
 In particular, when Alpha is equal to 0 each client has access to data belonging to only one class.
-(1)
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.3\textheight]{1_DirichletDistr.png}
+    \caption{Impact of Dirichlet on data distribution from (REFERENCE)}
+     \label{DirichletDistr} 
+\end{figure}
 (ADD GRAPHS WITH DIRICHLET DATA DIVIDED)
 In order to implement it, data already distributed with different Alpha parameters was taken from \url{https://github.com/google-research/google-research/tree/master/federated_vision_datasets} where Alpha goes from 0 to 100 for the CIFAR10 dataset.
 
 
 
 The results are shown in figure \ref{AccAlpha}. This image clearly illustrates the fact that expanding the difference in the dataset distribution between clients (lower Alpha), as expected, leads to the decrease in accuracy. 
-Moreover, from the plots of training and validation accuracy, it can be seen how the lower alpha is, the greater is the number of oscillations.
+Moreover, from the plots of training and validation accuracy ( Figure \ref{AccFedAvgA1}, Figure \ref{AccFedAvgA10}, Figure \ref{AccFedAvgA100} ), it can be seen how the lower alpha is, the greater is the number of oscillations.
 The accuracy on the training is higher because the smaller the Alpha, the smaller the number of classes each clients gets, hence a perfect prediction is expected. 
 (EXPAND THESE THOUGHTS A BIT, ADD AT LEAST THREE PLOTS FOR ACCURACY ex: a=1,10,100)
-(2A, 2B, 2C)
 
-To obtain results that are more similar to the IID scenario also for lower values of Alpha, increasing a lot the number of communication rounds was needed. For example, in Figure 10 (INSERT FIGURE WITH 200 rounds WITH alpha = 1) validation accuracy reaches around 65\% accuracy like in the iid setting.
-(3)
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.3\textheight]{2_AccuracyFedAvg_A1.png}
+    \caption{Accuracy using FedAvg with Alpha = 1}
+     \label{AccFedAvgA1} 
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.3\textheight]{2_AccuracyFedAvg_A10.png}
+    \caption{Accuracy using FedAvg with Alpha = 10}
+     \label{AccFedAvgA10} 
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.3\textheight]{2_AccuracyFedAvg_A100.png}
+    \caption{Accuracy using FedAvg with Alpha = 100}
+     \label{AccFedAvgA100} 
+\end{figure}
+
+To obtain results that are more similar to the IID scenario also for lower values of Alpha, increasing a lot the number of communication rounds was needed. For example, in Figure \ref{AccA1R200} with Alpha = 1 validation accuracy reaches around 65\% accuracy after 200 rounds like in the iid setting.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.3\textheight]{3_AccuracyFedAvg_A1R200.png}
+    \caption{Accuracy with Alpha = 1}
+    \label{AccA1R200} 
+\end{figure}
 
 Finally, the figure \ref{AccAlpha} states that the group normalization model over-performs the model without normalization. This behavior goes along with the results gotten in the normalization experiments, and in this situation, normalization has an even more important role. (MAYBE WRITE A LITTLE MORE).
 .
@@ -190,28 +220,52 @@ Finally, the figure \ref{AccAlpha} states that the group normalization model ove
 
 The same setup of the previous experiments (Rounds = 20, Epochs = 5, Local Batch size = 32, K = 100, C = 0.3) is taking as starting point for the analysis.
 For the FedAvgM the same settings as in [REFERENCE FOR PAPER] was used: SGD as the optimizer for the server model,  momentum (beta) = 0.9, and centralised model learning rate fixed to 1.
-From the accuracy and loss plots with IID data distributions for the clients, it can be seen how the results are very similar. However, the solution with server momentum has smaller oscillations and converges slightly faster. 
-(4A, 4B, 4a, 4b)
+From the accuracy and loss plots (\ref{4_AccuracyFedAvg_iid}, \ref{4_LossFedAvg_iid}, \ref{4_AccuracyFedAvgM_iid}, \ref{4_AccuracyFedAvgM_iid}) with IID data distributions for the clients, it can be seen how the results are very similar. However, the solution with server momentum has smaller oscillations and converges slightly faster. 
 
-An attempt was made to see if the behaviour changed for different values of momentum . The plots of accuracies in figures (PLOTS of accuracy WITH 0.997 and 0.7) show that when beta is lower the number of oscillations is higher, and their height is bigger.
-(5A, 5B)
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.3\textheight]{4_AccuracyFedAvg_iid.png}
+    \caption{Accuracy using FedAvg with iid data distributions}
+     \label{AccFedAvgIid} 
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.3\textheight]{4_LossFedAvg_iid.png}
+    \caption{Loss using FedAvg with iid data distributions}
+     \label{LossFedAvgIid} 
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.3\textheight]{4_AccuracyFedAvgM_iid.png}
+    \caption{Accuracy using FedAvgM with iid data distributions}
+     \label{AccFedAvgMIid} 
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.3\textheight]{4_LossFedAvgM_iid.png}
+    \caption{Loss using FedAvgM with iid data distributions}
+     \label{LossFedAvgMIid} 
+\end{figure}
+
+An attempt was made to see if the behaviour changed for different values of momentum . The plots of accuracies in figure \ref{AccFedAvgB0.7} and in figure \ref{AccFedAvgB0.997} show that when beta is lower the number of oscillations is higher, and their height is bigger.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.3\textheight]{5_AccuracyFedAvgM_Beta0.7.png}
+    \caption{Accuracy using FedAvgM with Beta = 0.7}
+     \label{AccFedAvgB0.7} 
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.3\textheight]{5_AccuracyFedAvgM_Beta0.997.png}
+    \caption{Accuracy using FedAvgM with Beta = 0.997}
+     \label{AccFedAvgB0.997} 
+\end{figure}
 
 With the non-IID data distributions for the clients, the results are slightly better than vanilla FedAvg's ones (SEE PLOT SIMILAR THAN PREVIOUS ONE). 
-(ASK ALFREDO 6)
-However, even in this case, there is a large presence of oscillations, particularly for small values of alpha, which makes comparison difficult.
-(COUPLE OF PLOTS OF ACCURACY, SEE IF CONVERGENCE IS FASTER, IN THAT CASE ADD A COMMENT, MAKE A COMPARISON WITH PREVIOUS ONE IF SOMETHING CHANGES)
-(7A, 7B, 7C)
-
-Since in the original setting the number of rounds is too low to appreciate any major difference between the vanilla FedAvg and FedAvgM behaviors, a decision was taken to change the setup by increasing the number of rounds to 1000, and decreasing the number of local epochs to 1 so that the computation could still be handled by the system.
-The idea was to explore different regions of the Figure (FIGURE 5 FROM PAPER) from (LINK OF PAPER) to see if also in this setting was found the same behavior.
-(8)
-In the case with alpha = 1 both the models reached accuracy around 0.7 and their trend is very similar, with wide oscillations in particular at the beginning.
-(9A, 9B)
-
-Then another attempt was made to pick a case in the rightmost part of Figure 5 (FIGURE FROM PAPER AS ABOVE) where the differences should be more evident, also changing the percentage of selected clients at each round (C) from 0.3 to 0.1. 
-However, even on this occasion, the two algorithms achieve similar results. In this case FedAvgM's algorithm fails to achieve the expected accuracy. Probably with such low values of alpha it would take an even greater number of rounds, which was not possible to test due to the limitations of the hardware at hand. The major difference between the two plots is at the beginning, where FedAvg starts with a higher value of training accuracy and converges faster.
-(10A, 10B)
-
 
 \begin{figure}
     \centering
@@ -219,6 +273,78 @@ However, even on this occasion, the two algorithms achieve similar results. In t
     \caption{Accuracy comparison between FedAvg and FedAvgMomentum}
     \label{FedAvgvsFedM} 
 \end{figure}
+
+However, even in this case, there is a large presence of oscillations, particularly for small values of alpha, which makes comparison difficult.
+We can see that from figures \ref{AccuracyFedAvgM_A1} , \ref{AccuracyFedAvgM_A10} and \ref{AccuracyFedAvgM_A1}.
+(COUPLE OF PLOTS OF ACCURACY, SEE IF CONVERGENCE IS FASTER, IN THAT CASE ADD A COMMENT, MAKE A COMPARISON WITH PREVIOUS ONE IF SOMETHING CHANGES)
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.3\textheight]{7_AccuracyFedAvgM_A1.png}
+    \caption{Accuracy using FedAvgM with Alpha = 1}
+     \label{AccFedAvgMA1} 
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.3\textheight]{7_AccuracyFedAvgM_A10.png}
+    \caption{Accuracy using FedAvgM with Alpha = 10}
+     \label{AccFedAvgMA10} 
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.3\textheight]{7_AccuracyFedAvgM_A100.png}
+    \caption{Accuracy using FedAvgM with Alpha = 100}
+     \label{AccFedAvgMA100} 
+\end{figure}
+
+
+Since in the original setting the number of rounds is too low to appreciate any major difference between the vanilla FedAvg and FedAvgM behaviors, a decision was taken to change the setup by increasing the number of rounds to 1000, and decreasing the number of local epochs to 1 so that the computation could still be handled by the system.
+The idea was to explore different regions of the Figure \ref{FedAvgMpaper} from (LINK OF PAPER) to see if also in this setting was found the same behavior.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.3\textheight]{8_FedAvgM_from_paper.png}
+    \caption{FedAvg vs FedAvgM behaviour from paper (REFERENCE)}
+     \label{FedAvgMpaper} 
+\end{figure}
+
+In the case with Alpha = 1 both the models reached accuracy around 0.7 and their trend is very similar, with wide oscillations in particular at the beginning.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.3\textheight]{9_AccuracyFedAvg_C0.3A_1.png}
+    \caption{Accuracy using FedAvg with C = 0.3 and Alpha = 1}
+     \label{AccFedAvgC0.3A1} 
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.3\textheight]{9_AccuracyFedAvgM_C0.3A_1.png}
+    \caption{Accuracy using FedAvgM with C = 0.3 and Alpha = 1}
+     \label{AccFedAvgMC0.3A1} 
+\end{figure}
+
+Then another attempt was made to pick a case in the rightmost part of Figure 5 (FIGURE FROM PAPER AS ABOVE) where the differences should be more evident, also changing the percentage of selected clients at each round (C) from 0.3 to 0.1. 
+However, even on this occasion, as shown in figure \ref{AccFedAvgC0.1A0.05} and in figure \ref{AccFedAvgMC0.1A0.05}, the two algorithms achieve similar results. In this case FedAvgM's algorithm fails to achieve the expected accuracy. Probably with such low values of alpha it would take an even greater number of rounds, which was not possible to test due to the limitations of the hardware at hand. The major difference between the two plots is at the beginning, where FedAvg starts with a higher value of training accuracy and converges faster.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.3\textheight]{10_AccuracyFedAvg_C0.1A_0.05.png}
+    \caption{Accuracy using FedAvg with C = 0.1 and Alpha = 0.05}
+     \label{AccFedAvgC0.1A0.05} 
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth,height=.3\textheight]{10_AccuracyFedAvgM_C0.1_A0.05.png}
+    \caption{Accuracy using FedAvgM with C = 0.1 and Alpha = 0.05}
+     \label{AccFedAvgMC0.1A0.05} 
+\end{figure}
+
+
+
 
 
 \subsection{Conclusion}
