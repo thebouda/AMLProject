@@ -121,7 +121,7 @@ Figure \ref{AccCompFedCent} represents the difference in performance between cen
      \label{AccCompFedCent} 
 \end{figure}
 \subsection{Group and Batch Normalization}
-In order to be able to decide which model implementation is better, a comparison between normalization was made in table \ref{batchNormComp}. What can be extracted form this experiment is that normalization is relevant for the accuracy. It's true that the accuracy does not improve much in the centralised model by adding normalization (from 79,73 to 81,7 \% for no normalization and group normalization respectively). However, in the federated learning, normalization seems crucial, as the worst performance was achieved by the model without it (65\%). Moreover adding the normalization layer, added up to 9\% in accuracy performance. 
+In order to be able to decide which model implementation is better, a comparison between normalization was made in table \ref{batchNormComp}. What can be extracted form this experiment is that normalization is relevant for the accuracy. It's true that the accuracy does not improve much in the centralised model by adding normalization (from 78,98 to 81,7 \% for no normalization and group normalization respectively). However, in the federated learning, normalization seems crucial, as the worst performance was achieved by the model without it (65\%). Moreover adding the normalization layer, added up to 9\% in accuracy performance. 
 
 
 \begin{table}
@@ -134,16 +134,16 @@ In order to be able to decide which model implementation is better, a comparison
  \hline
  Federated & 65,49 & No\\
  \hline
-  Federated &  \ensuremath{\mathbf{74,57}} & Group\\
+  Federated &  \ensuremath{\mathbf{74,57}} & Group (8-2)\\
  \hline
-  Centralised & 78,98 & Batch\\
+  Centralised & 79,73 & Batch\\
    \hline
-  Centralised  & 79,73 & No\\
+  Centralised  & 78,98  & No\\
    \hline
   Centralised  & \ensuremath{\mathbf{81,7}} & Group\\
   \bottomrule                             
 \end{tabular}
-\caption{Performance comparison with batch normalization}
+\caption{Performance comparison with batch normalization for 10 rounds and 10 epochs}
 \label{batchNormComp}
 \end{table}
 
