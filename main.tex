@@ -43,14 +43,14 @@ With the mass of data generated each day by multiple sources (i.e. IoT), machine
 
 Introduced by Google in 2016 \cite{DBLP:journals/corr/KonecnyMYRSB16}, Federated Learning enables models to be iteratively trained in a decentralized way, on local devices. At each round, a subset of sources (also called \emph{clients}) are selected to perform local training on their own data. Then, the centralized model aggregates the ensemble of updates to make the new global model and send back it to another subset of clients. 
 
-As a part of the Advanced Machine Learning course at Politecnico di Torino, this paper will cover the work on the replication of the experiment proposed by \cite{DBLP:journals/corr/abs-2003-08082} on the CIFAR10 dataset [3] \emph{https://www.cs.toronto.edu/~kriz/cifar.html} which consists of analyzing the effects that client's data distributions have on federated models. Especially distributions such as Non-Identical Class Distribution, meaning that each client has a different class distribution and Imbalanced Client Sizes, meaning that each client has a different amount of data. 
+As a part of the Advanced Machine Learning course at Politecnico di Torino, this paper will cover the work on the replication of the experiment proposed by \cite{DBLP:journals/corr/abs-2003-08082} on the CIFAR10 dataset which consists of analyzing the effects that client's data distributions have on federated models. Especially distributions such as Non-Identical Class Distribution (each client has a different class distribution) and Imbalanced Client Sizes (each client has a different amount of data). 
 
-The work will cover the federated scenario using the standard FedAvg aglorithm with multiple sets of parameters and evaluate the one with the greatest performance. Experiments with different settings such as data distribution, normalization layers and group normalization will be implemented. Finally, there will be a solution proposal (which will be a test) in order to solve one of the identified problems.
+The work will cover the federated scenario using the standard FedAvg algorithm with multiple sets of parameters and evaluate the one with the greatest performance. Experiments with different settings such as data distribution, normalization layers and group normalization will be implemented. Finally, there will be a solution proposal (which will be a test) in order to solve one of the identified problems.
 
 \section{Related Work} %mandatory
-This experiment has already been performed by \cite{DBLP:journals/corr/abs-2003-08082}  on the iNaturalist-2017 [4] \emph{https://paperswithcode.com/dataset/inaturalist} dataset. They provided an analyze of the effect of learning with per-used data and proposed two new algorithms (FedVC, FedIR) and provided new large-scale datasets with per-user data.
+This experiment has already been performed by \cite{DBLP:journals/corr/abs-2003-08082}  on the iNaturalist-2017 dataset. They provided an analysis of the effect of learning with per-used data and proposed two new algorithms (FedVC, FedIR) and provided new large-scale datasets with per-user data.
 
-A different algorithm (FedAvgM) has been proposed by \cite{DBLP:journals/corr/abs-1909-06335} using momentum on top of SGD to accelerate the network training. This approach changes the way the weights are updated to add momentum at the server.
+A different algorithm (FedAvgM) has been proposed by \cite{DBLP:journals/corr/abs-1909-06335} using momentum on top of SGD to accelerate the network training. This approach changes the way the weights are updated to add momentum at the server side.
 
 \section{Methods} %mandatory describe algorithms
 There are various steps in the building of the final algorithm. In this section the decisions that led to choose the values for the parameters and the choice for different algorithms implemented will be explained. 
@@ -60,14 +60,14 @@ Federated learning applied in the real world, would take into account multiple d
 \subsection{Problem setup}
 Federated Learning consists of a client and a server side. Considering the CIFAR10 dataset contains 50 000 samples for training and 10 000 samples for testing, choosing the number of clients K = 100 was thought as to be representing of a real-world scenario (averaging 500 images per client for training). 
 
-Moreover, in order to simulate real world data, a Delta variable was implemented into the code in order to add randomness regarding the distribution of the data among clients. The variable added some casualty to the quantity of data that each client would be seeing. For example, if Delta = 100, each of the 100 clients would have a minimum of 400 images and a maximum of 600. (50 000 / 100 = 500 +- 100).
+Moreover, in order to simulate real world data, a Delta variable was implemented into the code in order to add randomness regarding the distribution of the data among clients. The variable added some casualty to the quantity of data that each client would be seeing. For example, if Delta = 100, each of the 100 clients would have data between a minimum of 400 images and a maximum of 600. (50 000 / 100 = 500 +- 100).
 
 
-To add up, the distribution of data was considered to be performed randomly. The variability Delta introduced was not great, and this was done intentionally. The problem of some client having way bigger amount of images (2-3 times) than others could have been solved with the creation of additional virtual clients and splitting the data among them. In terms of implementation this would be equal to increasing the number of clients from K to K + i, where i is the number of the virtual clients created. 
+To add up, the distribution of data was considered to be performed randomly. The variability Delta introduced was not great, and this was done intentionally. The problem of some client having way bigger amount of images than others (2-3 times) could have been solved with the creation of additional virtual clients and splitting the data among them. In terms of implementation this would be equal to increasing the number of clients from K to K + i, where i is the number of the virtual clients created. 
 
-Moreover in order to test the model, the accuracy on the training was computed as an average of the accuracy on the client's data. On the validation part, the accuracy was tested witht the whole validation dataset on the server side.
+Moreover in order to test the model, the accuracy on the training was computed as an average of the accuracy on the client's data. On the validation part, the accuracy was tested with the whole validation dataset on the server side.
 
-Finally the number of clients C, was chosen based on performance. As the table \ref{table:CComp}, relates, the best performance is for C=0.4, however the number of clients increases significantly and hence computing time. For thee reason, the next best value of C (C=0.3) was chosen for the model.
+Finally the number of clients C, was chosen based on performance. As the table \ref{table:CComp}, relates, the best performance is for C=0.4, however the number of clients increases significantly and hence computing time. For this reason, the next best value of C (C=0.3) was chosen for the model.
 
 
 \begin{table}
@@ -92,24 +92,24 @@ Finally the number of clients C, was chosen based on performance. As the table \
 
 \subsection{Network}
 
-With that in mind, for the neural network a variation of LeNet5 was chosen, which has two 5×5, 64-channel convolution layers, each precedes a 2×2 max-pooling layer, followed by two fully-connected layers with 384 and 192 channels respectively and finally a softmax linear classifier (REFERENCE TO PAPER 3 an insert image if possible). 
+With that in mind, for the neural network a variation of LeNet5 was chosen, which has two 5×5, 64-channel convolution layers, each precedes a 2×2 max-pooling layer, followed by two fully-connected layers with 384 and 192 channels respectively and finally a softmax linear classifier \cite{DBLP:journals/corr/abs-2003-08082}. 
 
 As each device implements the model and considering each having a different computational capacity, a small and simple network was selected in order for the computation to be the quickest possible but also having the capacity to gather information from the client's dataset.
 
 \subsection{Algorithm}
-The Federated Average algorithm (FedAvg) was picked for the sever aggregation part of the algorithm. The FedAvg consists on aggregating the weights of the clients according the number of images each client sees, with respect to the total number of images of the dataset.(SPECIFIY MORE AND CORRECT)
+The Federated Average algorithm (FedAvg) was picked for the sever aggregation part of the algorithm. The FedAvg consists on aggregating the weights of the clients according the number of images each client sees, with respect to the total number of images of the dataset.
 The FedAvg algorithm is simple, but useful enough in order to get an acceptable accuracy.
 
-In addition, a variant of the Federated Average algorithm with server momentum was also considered, called FedAvgM [REFERENCE PAPER]. Vanilla FedAvg updates the weights via (FORMULA). To add momentum at the server side, a different computation is made instead (FORMULA) and update the model with (FORMULA). 
+In addition, a variant of the Federated Average algorithm with server momentum was also considered, called FedAvgM \ref{DBLP:journals/corr/abs-1909-06335}. Vanilla FedAvg updates the weights via (FORMULA). To add momentum at the server side, a different computation is made instead (FORMULA) and update the model with (FORMULA). 
 
-A comparison between the two algorithms was thought as interesting in order to see what impact the introduction of the momentum server had on the rapidity of convergence and oscillations, particularly in the scenario where clients have different data distributions.
+A comparison between the two algorithms was thought as interesting in order to see what impact the introduction of the momentum server had on the speed of convergence and oscillations, particularly in the scenario where clients have different data distributions.
 
 
 \section{Experiments} % mandatory
 \subsection{Federated Average}
 As baseline model, Federated Average (FedAvg) algorithm was chosen. In order to get an idea of the performance of the algorithm, a comparison with the centralised model was needed. 
 
-First of all, fine-tuning the parameters for the centralized model was needed. A decision was made to adopt the number of epochs E = 100, as a trade off between performance and computational cost. The best learning rate the value LR = 2e-3 was discovered as resulting in better performance, because lower values had worse results, while higher values showed overfitting. With that in mind, in the federated model, the same learning rate was used, and a decision was made to use 20 rounds of 5 local epochs, to have a fair comparison between the two scenarios.
+First of all, fine-tuning the parameters for the centralized model was necessary. A decision was made to adopt the number of epochs E = 100, as a trade off between performance and computational cost. The best learning rate the value LR = 2e-3 was discovered as resulting in better performance, because lower values had worse results, while higher values showed overfitting. With that in mind, in the federated model, the same learning rate was used, and a decision was made to use 20 rounds of 5 local epochs, to have a fair comparison between the two scenarios.
 
 Figure \ref{AccCompFedCent} represents the difference in performance between centralised and federated model with different set configuration. It's evident and as awaited, that the centralised model has a better performance in all scenarios. The FedAvg does not lead to a good accuracy, hardly reaching 70\%. Still, being a model without any further optimization, the accuracy was thought as acceptable.
 
@@ -151,7 +151,7 @@ In order to be able to decide which model implementation is better, a comparison
 \subsection{Different data sizes}
 In order to simulate different quantity of data that each client is going to have, a variable Delta was implemented in order to add randomness. The experiment was followed by changing the number of groups division of the group normalization layer 1 and 2. The results are represented in figure \ref{AccDiff}, illustrating with different group normalization parameters, the accuracy over the validation set. 
 
-Sticking with figure \ref{AccDiff}, over 8 tests done, there's no clear difference of a better performance with or without Delta variable. Therefore, a new experiment was done, however this one just varying Delta to see the behaviour of the model, anything else remained unchanged. The results are presented in figure \ref{DeltaValue}. As it can be seen from the graph, for a Delta varying form 50 to 300 the accuracy does not decrease considerably, however, after Delta =400, it appears as the performance starts to decrease which was expected, as the data among the clients start to differ substantially (form 73,44\% to 70,64\%).
+Sticking with figure \ref{AccDiff}, over 8 tests done, there's no clear difference of a better performance with or without Delta variable. Therefore, a new experiment was done, however this one just varying Delta to see the behaviour of the model, anything else remained unchanged. The results are presented in figure \ref{DeltaValue}. As it can be seen from the graph, for a Delta varying form 50 to 300 the accuracy does not decrease, however, after Delta =400, it appears as the performance starts to decrease which was expected, as the data among the clients start to differ substantially (form 73,44\% to 70,64\%).
 
 % three performed better with the Delta variable activated, and one specifically (8-2) outperformed every over scenario with an accuracy of 78,27\%. The accuracies presented in the figure \ref{AccDiff} are very similar between each other, even though with the deactivation of the Delta variable (each client with the same amount of data) it seems to perform better, as 5/8 tests had greater accuracy than with using Delta.
 
@@ -170,7 +170,7 @@ Sticking with figure \ref{AccDiff}, over 8 tests done, there's no clear differen
     \centering
     \includegraphics[width=0.5\textwidth,height=.3\textheight]{deltacomparison.png}
     \caption{Accuracy over validation set with different Delta values variable}
-     \label{DeltaValues} 
+     \label{DeltaValue} 
 \end{figure}
 
 \subsection{Dirichlet distribution}
@@ -189,9 +189,8 @@ In order to implement it, data already distributed with different Alpha paramete
 
 
 The results are shown in figure \ref{AccAlpha}. This image clearly illustrates the fact that expanding the difference in the dataset distribution between clients (lower Alpha), as expected, leads to the decrease in accuracy. 
-Moreover, from the plots of training and validation accuracy ( Figure \ref{AccFedAvgA1}, Figure \ref{AccFedAvgA10}, Figure \ref{AccFedAvgA100} ), it can be seen how the lower alpha is, the greater is the number of oscillations.
+Moreover, from the plots of training and validation accuracy ( Figure \ref{AccFedAvgA1}, Figure \ref{AccFedAvgA10}, Figure \ref{AccFedAvgA100} ), it can be seen how the smaller Alpha, the greater the number of oscillations.
 The accuracy on the training is higher because the smaller the Alpha, the smaller the number of classes each clients gets, hence a perfect prediction is expected. 
-(EXPAND THESE THOUGHTS A BIT, ADD AT LEAST THREE PLOTS FOR ACCURACY ex: a=1,10,100)
 
 \begin{figure}
     \centering
@@ -214,7 +213,7 @@ The accuracy on the training is higher because the smaller the Alpha, the smalle
      \label{AccFedAvgA100} 
 \end{figure}
 
-To obtain results that are more similar to the IID scenario also for lower values of Alpha, increasing a lot the number of communication rounds was needed. For example, in Figure \ref{AccA1R200} with Alpha = 1 validation accuracy reaches around 65\% accuracy after 200 rounds like in the iid setting.
+To obtain results that are more similar to the IID scenario also for lower values of Alpha, increasing a lot the number of communication rounds was needed. For example, in Figure \ref{AccA1R200} with Alpha = 1 validation accuracy reaches around 65\% accuracy after 200 rounds like in the IID setting.
 \begin{figure}
     \centering
     \includegraphics[width=0.5\textwidth,height=.3\textheight]{3_AccuracyFedAvg_A1R200.png}
@@ -222,8 +221,7 @@ To obtain results that are more similar to the IID scenario also for lower value
     \label{AccA1R200} 
 \end{figure}
 
-Finally, the figure \ref{AccAlpha} states that the group normalization model over-performs the model without normalization. This behavior goes along with the results gotten in the normalization experiments, and in this situation, normalization has an even more important role. (MAYBE WRITE A LITTLE MORE).
-.
+Finally, the figure \ref{AccAlpha} states that the group normalization model over-performs the model without normalization. This behavior goes along with the results gotten in the normalization experiments, and in this situation, normalization has an even more important role.
 
 
 \begin{figure}
@@ -234,9 +232,9 @@ Finally, the figure \ref{AccAlpha} states that the group normalization model ove
 \end{figure}
 
 
-\subsection{Federated Average Momentum (additional contribution?)}
+\subsection{Federated Average Momentum (additional contribution)}
 
-The same setup of the previous experiments (Rounds = 20, Epochs = 5, Local Batch size = 32, K = 100, C = 0.3) is taking as starting point for the analysis.
+The same setup of the previous experiments (Rounds = 20, Epochs = 5, Local Batch size = 32, K = 100, C = 0.3) is taken as starting point for the analysis.
 For the FedAvgM the same settings as in [REFERENCE FOR PAPER] was used: SGD as the optimizer for the server model,  momentum (beta) = 0.9, and centralised model learning rate fixed to 1.
 From the accuracy and loss plots (\ref{4_AccuracyFedAvg_iid}, \ref{4_LossFedAvg_iid}, \ref{4_AccuracyFedAvgM_iid}, \ref{4_AccuracyFedAvgM_iid}) with IID data distributions for the clients, it can be seen how the results are very similar. However, the solution with server momentum has smaller oscillations and converges slightly faster. 
 
@@ -283,7 +281,7 @@ An attempt was made to see if the behaviour changed for different values of mome
      \label{AccFedAvgB0.997} 
 \end{figure}
 
-With the non-IID data distributions for the clients, the results are slightly better than vanilla FedAvg's ones (SEE PLOT SIMILAR THAN PREVIOUS ONE). 
+With the non-IID data distributions for the clients, the results are slightly better than vanilla FedAvg's ones. 
 
 \begin{figure}
     \centering
@@ -366,9 +364,9 @@ However, even on this occasion, as shown in figure \ref{AccFedAvgC0.1A0.05} and 
 
 
 \subsection{Conclusion}
-The general idea that can be done form this paper work is that, although it doesn't have the accuracy of the centralised model, Federated Learning works and can be used on real life scenarios.
+The general idea that can be drawn form this work is that, although it doesn't have the accuracy of the centralised model, Federated Learning works and can be used on real life scenarios.
 
-Moreover, as it has been shown with, the FedAvg does just fine if not fine tuned, and certainly normalization helps to improve the accuracy. As a general tendency, the normalization improves the  accuracy, whether it is group or batch normalization (even though group normalization better performances). 
+Moreover, as it has been shown with, the FedAvg does just fine if not fine tuned, and certainly normalization helps to improve the accuracy. As a general tendency, the normalization improves the  accuracy, whether it is group or batch normalization (even though group normalization has better performances). 
 
 Additionally, the introduction of non IID and different quantity of data to the clients increased the difficulty of data treatment and learning. However, if the parameters didn't led to extreme cases, the accuracy was still acceptable.
 
