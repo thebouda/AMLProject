@@ -21,7 +21,7 @@ style=alphabetic
 \graphicspath{ {latexIMG/} }
 
 
-\title{AML Project
+\title{\textbf{AML Project}
 \\Federated Learning: where machine learning \\and data privacy can coexist
 }
 
@@ -63,12 +63,32 @@ Federated Learning consists of a client and a server side. Considering the CIFAR
 Moreover, in order to simulate real world data, a Delta variable was implemented into the code in order to add randomness regarding the distribution of the data among clients. The variable added some casualty to the quantity of data that each client would be seeing. For example, if Delta = 100, each of the 100 clients would have a minimum of 400 images and a maximum of 600. (50 000 / 100 = 500 +- 100).
 
 
-To add up, the distribution of data was considered to be performed randomly. The variability Delta introduced was not great, and this was done intentionally. The problem of some client having way bigger amount of images (2-3 times) than others could have been solved with the creation of additional virtual clients and splitting the data among them. In terms of implementation this would be equal to increasing the number of clients from K to K + i, where i is the number of the virtual clients created (CHECK IF IT MAKES SENSE). 
+To add up, the distribution of data was considered to be performed randomly. The variability Delta introduced was not great, and this was done intentionally. The problem of some client having way bigger amount of images (2-3 times) than others could have been solved with the creation of additional virtual clients and splitting the data among them. In terms of implementation this would be equal to increasing the number of clients from K to K + i, where i is the number of the virtual clients created. 
 
 Moreover in order to test the model, the accuracy on the training was computed as an average of the accuracy on the client's data. On the validation part, the accuracy was tested witht the whole validation dataset on the server side.
 
-Finally the number of selected clients C, was chosen based on performance (INSERT TABLE OR GRAPHIC). In fact, with a C <0.3 the performance decreased significantly (put some values).
-INSERT GRAPHICS BETWEEN DIFFERENT C AND THE CONSOLIDATED MODEL
+Finally the number of clients C, was chosen based on performance. As the table \ref{table:CComp}, relates, the best performance is for C=0.4, however the number of clients increases significantly and hence computing time. For thee reason, the next best value of C (C=0.3) was chosen for the model.
+
+
+\begin{table}
+\centering
+\begin{tabular}{||c c ||} 
+  \toprule
+    \makecell{C Values} &\makecell{Validation Accuracy (\%)} \\
+  \midrule
+  0.1  & 54,91  \\
+ \hline
+ 0.2 & 64,96 \\
+ \hline
+  0.3 &  69,79 \\
+ \hline
+  0.4 & \ensuremath{\mathbf{73,12}} \\
+  \bottomrule                             
+\end{tabular}
+\caption{Performance comparison with different C values}
+\label{table:CComp}
+\end{table}
+
 
 \subsection{Network}
 
@@ -77,7 +97,7 @@ With that in mind, for the neural network a variation of LeNet5 was chosen, whic
 As each device implements the model and considering each having a different computational capacity, a small and simple network was selected in order for the computation to be the quickest possible but also having the capacity to gather information from the client's dataset.
 
 \subsection{Algorithm}
-The Federated Average algorithm (FedAvg) was picked for the sever aggregation part of the algorithm. The FedAvg (PUT FORMULA AND REFERENCES) consists on aggregating the weights of the clients according the number of images each client sees, with respect to the total number of images of the dataset.(SPECIFIY MORE AND CORRECT)
+The Federated Average algorithm (FedAvg) was picked for the sever aggregation part of the algorithm. The FedAvg consists on aggregating the weights of the clients according the number of images each client sees, with respect to the total number of images of the dataset.(SPECIFIY MORE AND CORRECT)
 The FedAvg algorithm is simple, but useful enough in order to get an acceptable accuracy.
 
 In addition, a variant of the Federated Average algorithm with server momentum was also considered, called FedAvgM [REFERENCE PAPER]. Vanilla FedAvg updates the weights via (FORMULA). To add momentum at the server side, a different computation is made instead (FORMULA) and update the model with (FORMULA). 
@@ -90,19 +110,18 @@ A comparison between the two algorithms was thought as interesting in order to s
 As baseline model, Federated Average (FedAvg) algorithm was chosen. In order to get an idea of the performance of the algorithm, a comparison with the centralised model was needed. 
 
 First of all, fine-tuning the parameters for the centralized model was needed. A decision was made to adopt the number of epochs E = 100, as a trade off between performance and computational cost. The best learning rate the value LR = 2e-3 was discovered as resulting in better performance, because lower values had worse results, while higher values showed overfitting. With that in mind, in the federated model, the same learning rate was used, and a decision was made to use 20 rounds of 5 local epochs, to have a fair comparison between the two scenarios.
-(ADD A COUPLE OF PLOTS FOR CENTRALISED MODEL FINE-TUNING)
 
-Figure \ref{AccCompFedCent} represents the difference in performance between centralised and federated model with different set configuration. It's evident and as awaited, that the centralised model has a better performance in all scenarios. The FedAvg does not lead to a good accuracy, hardly reaching 70\%. Still, being a model without any further optimization, the accuracy was thought as acceptable. (ADD TAGS TO COLUMNS a,b,c and explain the details below)
+Figure \ref{AccCompFedCent} represents the difference in performance between centralised and federated model with different set configuration. It's evident and as awaited, that the centralised model has a better performance in all scenarios. The FedAvg does not lead to a good accuracy, hardly reaching 70\%. Still, being a model without any further optimization, the accuracy was thought as acceptable.
 
 
 \begin{figure}
     \centering
     \includegraphics[width=0.5\textwidth,height=.3\textheight]{FedAccuracyComp.png}
-    \caption{Accuracy comparison between centralised and federated model}
+    \caption{Accuracy comparison between centralised and federated model. (Set A: no normalization, Set B: batch normalization, Set C: group normalization (2-2), Set D: group normalization (2-4), Set C: group normalization (2-16)}
      \label{AccCompFedCent} 
 \end{figure}
 \subsection{Group and Batch Normalization}
-In order to be able to decide which model implementation is better, a comparison between normalization was made in table \ref{batchNormComp}. What can be extracted form this experiment is that normalization is relevant for the accuracy. It's true that the accuracy does not improve much in the centralised model by adding normalization (from 79,73 to 81,7 \% for no normlization and group normalization respectively). However, in the federated learning, normalization seems crucial, as the worst performance was achieved by the model without it (65\%). Moreover adding the normalization layer, added up to 9\% in accuracy performance. 
+In order to be able to decide which model implementation is better, a comparison between normalization was made in table \ref{batchNormComp}. What can be extracted form this experiment is that normalization is relevant for the accuracy. It's true that the accuracy does not improve much in the centralised model by adding normalization (from 79,73 to 81,7 \% for no normalization and group normalization respectively). However, in the federated learning, normalization seems crucial, as the worst performance was achieved by the model without it (65\%). Moreover adding the normalization layer, added up to 9\% in accuracy performance. 
 
 
 \begin{table}
@@ -124,8 +143,8 @@ In order to be able to decide which model implementation is better, a comparison
   Centralised  & \ensuremath{\mathbf{81,7}} & Group\\
   \bottomrule                             
 \end{tabular}
-\label{batchNormComp}
 \caption{Performance comparison with batch normalization}
+\label{batchNormComp}
 \end{table}
 
 
@@ -156,16 +175,15 @@ Sticking with figure \ref{AccDiff}, over 8 tests done, there's no clear differen
 
 \subsection{Dirichlet distribution}
 
-In order to achieve a better understanding of the possible accuracy outcomes when deploying the model, different data distribution between clients should be taken into account. \textbf{\emph{NOTE : Not sure to understand the previous sentence.}} In order to simulate client getting different data distribution, the Dirichlet distribution was used. The parameter Alpha, represents how different the distribution is between clients: with a greater Alpha, the distributions 
+In order to achieve a better understanding of the possible accuracy outcomes when deploying the model, different data distribution between clients should be taken into account. In order to simulate client getting different data distribution, the Dirichlet distribution was used. The parameter Alpha, represents how different the distribution is between clients: with a greater Alpha, the distributions 
 would be similar, with smaller Alpha, the distribution between clients differs.
 In particular, when Alpha is equal to 0 each client has access to data belonging to only one class.
-\begin{figure}
-    \centering
-    \includegraphics[width=0.5\textwidth,height=.3\textheight]{1_DirichletDistr.png}
-    \caption{Impact of Dirichlet on data distribution from (REFERENCE)}
-     \label{DirichletDistr} 
-\end{figure}
-(ADD GRAPHS WITH DIRICHLET DATA DIVIDED)
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=0.5\textwidth,height=.2\textheight]{1_DirichletDistr.png}
+%     \caption{Impact of Dirichlet on data distribution from (REFERENCE)}
+%      \label{DirichletDistr} 
+% \end{figure}
 In order to implement it, data already distributed with different Alpha parameters was taken from \url{https://github.com/google-research/google-research/tree/master/federated_vision_datasets} where Alpha goes from 0 to 100 for the CIFAR10 dataset.
 
 
@@ -303,12 +321,12 @@ We can see that from figures \ref{AccuracyFedAvgM_A1} , \ref{AccuracyFedAvgM_A10
 Since in the original setting the number of rounds is too low to appreciate any major difference between the vanilla FedAvg and FedAvgM behaviors, a decision was taken to change the setup by increasing the number of rounds to 1000, and decreasing the number of local epochs to 1 so that the computation could still be handled by the system.
 The idea was to explore different regions of the Figure \ref{FedAvgMpaper} from (LINK OF PAPER) to see if also in this setting was found the same behavior.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=0.5\textwidth,height=.3\textheight]{8_FedAvgM_from_paper.png}
-    \caption{FedAvg vs FedAvgM behaviour from paper (REFERENCE)}
-     \label{FedAvgMpaper} 
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=0.5\textwidth,height=.3\textheight]{8_FedAvgM_from_paper.png}
+%     \caption{FedAvg vs FedAvgM behaviour from paper (REFERENCE)}
+%      \label{FedAvgMpaper} 
+% \end{figure}
 
 In the case with Alpha = 1 both the models reached accuracy around 0.7 and their trend is very similar, with wide oscillations in particular at the beginning.
 
