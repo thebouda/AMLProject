@@ -142,10 +142,10 @@ In order to be able to decide which model implementation is better, a comparison
    \hline
   Centralised  & 78,98  & No\\
    \hline
-  Centralised  & \ensuremath{\mathbf{81,7}} & Group\\
+  Centralised  & \ensuremath{\mathbf{81,7}} & Group (8-2)\\
   \bottomrule                             
 \end{tabular}
-\caption{Performance comparison with batch normalization for 10 rounds and 10 epochs}
+\caption{Performance comparison with normalization for 5 epochs 20 rounds}
 \label{batchNormComp}
 \end{table}
 
@@ -166,7 +166,7 @@ Sticking with figure \ref{AccDiff}, over 8 tests done, there's no clear differen
 \begin{figure}
     \centering
     \includegraphics[width=0.5\textwidth,height=.3\textheight]{deltacomparison.png}
-    \caption{Accuracy over validation set with different Delta values variable}
+    \caption{Accuracy over validation set with different Delta values variable with group normalization (8-2)}
      \label{DeltaValue} 
 \end{figure}
 
@@ -182,7 +182,7 @@ In order to implement it, data already distributed with different Alpha paramete
 
 The results are shown in figure \ref{AccAlpha}. This image clearly illustrates the fact that expanding the difference in the dataset distribution between clients (lower Alpha), as expected, leads to the decrease in accuracy. 
 Moreover, from the plots of training and validation accuracy ( Figure \ref{AccFedAvgA1}, Figure \ref{AccFedAvgA10}, Figure \ref{AccFedAvgA100} ), it can be seen how the smaller Alpha, the greater the number of oscillations.
-The accuracy on the training is higher because the smaller the Alpha, the smaller the number of classes each clients gets, hence a perfect prediction is expected. 
+The accuracy on the training is higher because the smaller the Alpha, the smaller the number of classes each clients gets, hence a perfect prediction is expected, hence over-fitting the model. 
 
 \begin{figure}
     \centering
@@ -227,34 +227,34 @@ Finally, the figure \ref{AccAlpha} states that the group normalization model ove
 \subsection{Federated Average Momentum (additional contribution)}
 
 The same setup of the previous experiments (Rounds = 20, Epochs = 5, Local Batch size = 32, K = 100, C = 0.3) is taken as starting point for the analysis.
-For the FedAvgM the same settings as in [REFERENCE FOR PAPER] was used: SGD as the optimizer for the server model,  momentum (beta) = 0.9, and centralised model learning rate fixed to 1.
+For the FedAvgM the same settings as in \cite{DBLP:journals/corr/abs-1909-06335} was used: SGD as the optimizer for the server model,  momentum (beta) = 0.9, and centralised model learning rate fixed to 1.
 From the accuracy and loss plots (\ref{AccFedAvgIid}, \ref{LossFedAvgIid}, \ref{AccFedAvgMIid}, \ref{LossFedAvgMIid}) with IID data distributions for the clients, it can be seen how the results are very similar. However, the solution with server momentum has smaller oscillations and converges slightly faster. 
 
 \begin{figure}
     \centering
     \includegraphics[width=0.5\textwidth,height=.3\textheight]{4_AccuracyFedAvg_iid.png}
-    \caption{Accuracy using FedAvg with iid data distributions}
+    \caption{Accuracy using FedAvg with IID data distributions}
      \label{AccFedAvgIid} 
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.5\textwidth,height=.3\textheight]{4_LossFedAvg_iid.png}
-    \caption{Loss using FedAvg with iid data distributions}
+    \caption{Loss using FedAvg with IID data distributions}
      \label{LossFedAvgIid} 
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.5\textwidth,height=.3\textheight]{4_AccuracyFedAvgM_iid.png}
-    \caption{Accuracy using FedAvgM with iid data distributions}
+    \caption{Accuracy using FedAvgM with IID data distributions}
      \label{AccFedAvgMIid} 
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.5\textwidth,height=.3\textheight]{4_LossFedAvgM_iid.png}
-    \caption{Loss using FedAvgM with iid data distributions}
+    \caption{Loss using FedAvgM with IID data distributions}
      \label{LossFedAvgMIid} 
 \end{figure}
 
@@ -273,7 +273,7 @@ An attempt was made to see if the behaviour changed for different values of mome
      \label{AccFedAvgB0.997} 
 \end{figure}
 
-With the non-IID data distributions for the clients, the results are slightly better than vanilla FedAvg's ones. 
+With the non-IID data distributions for the clients, the results are slightly better than vanilla FedAvg's ones (see figure \ref{FedAvgvsFedM}). 
 
 \begin{figure}
     \centering
@@ -352,7 +352,7 @@ However, even on this occasion, as shown in figure \ref{AccFedAvgC0.1A0.05} and 
 \subsection{Conclusion}
 The general idea that can be drawn from this work is that, although it doesn't have the accuracy of the centralised model, Federated Learning works and can be used on real life scenarios.
 
-Moreover, as it has been shown with, the FedAvg does just fine if not fine tuned, and certainly normalization helps to improve the accuracy. As a general tendency, the normalization improves the  accuracy, whether it is group or batch normalization (even though group normalization has better performances). 
+Moreover, as it has been shown with the FedAvg algorithm, the model does just fine if not fine tuned, and certainly normalization helps to improve the accuracy. As a general tendency, group normalization over-performs batch and non normalization cases. 
 
 Additionally, the introduction of non IID and different quantity of data to the clients increased the difficulty of data treatment and learning. However, if the parameters didn't led to extreme cases, the accuracy was still acceptable.
 
