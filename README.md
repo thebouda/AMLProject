@@ -12,13 +12,13 @@ Code implementation of the federated model
 # federatedServerMomentum.ipynb
 Code implementation of the federated model with server momentum (FedAvgM)
 
-# main.pdf
+# AMLReport.pdf
 Final pdf report
 
 # lenet5
 CNN network class
 
-# cifar folders
+# cifar folder
 Folder for the dirichlet distribution
 
 # main.tex 
